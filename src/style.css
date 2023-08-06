@@ -45,6 +45,7 @@ body {
   width: 100%;
   height: 35px;
   border-radius: 7px;
+  cursor: pointer;
 }
 
 .projects-tab > p {
@@ -54,7 +55,6 @@ body {
 .projects-tab > svg {
   height: 20px;
   margin: 0 10px;
-  cursor: pointer;
   transform: rotate(180deg);
   transition: .2s all;
 }
@@ -62,7 +62,7 @@ body {
 .all-projects-container {
   background-color: #fafafa;
   border: 1px solid #d7dcde;
-  box-shadow: 0 0 5px rgba(0, 0, 0, .15);
+  box-shadow: 0 0 5px rgba(0, 0, 0, .05);
   border-top: none;
   border-bottom-left-radius: 7px;
   border-bottom-right-radius: 7px;
@@ -77,10 +77,26 @@ body {
   border-bottom: 1px solid #d7dcde;
 }
 
-.project-container:last-child {
+.project-container:not(.project-container:first-child) {
   border-top: 1px solid #d7dcde;
 }
 
 .project-container > p {
   margin: 0 20px;
+}
+
+.project-container:hover {
+  cursor: pointer;
+  background-color: #e5eaec;
+}
+
+.inbox-tab {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.inbox-tab > svg {
+  height: 20px;
+  margin: 0 10px;
 }

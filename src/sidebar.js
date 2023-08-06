@@ -6,9 +6,22 @@ const sidebar = (() => {
     const sidebarContainer = document.createElement("div");
     sidebarContainer.classList.add("sidebar-container");
 
-    sidebarContainer.append(addProjectsTab(), addProjects());
+    sidebarContainer.append(addInboxTab(), addProjectsTab(), addProjects());
 
     return sidebarContainer;
+  }
+
+  function addInboxTab() {
+    const inboxTab = document.createElement("div");
+    inboxTab.classList.add("inbox-tab");
+
+    inboxTab.innerHTML = InboxIcon;
+
+    const p = document.createElement("p");
+    p.textContent = "Inbox";
+    inboxTab.appendChild(p);
+
+    return inboxTab;
   }
 
   function addProjectsTab() {
@@ -50,7 +63,14 @@ const sidebar = (() => {
     p2.textContent = "Self";
     projectContainer2.appendChild(p2);
 
-    return [projectContainer1, projectContainer2]
+    const projectContainer3 = document.createElement("div");
+    projectContainer3.classList.add("project-container");
+
+    const p3 = document.createElement("p");
+    p3.textContent = "smh";
+    projectContainer3.appendChild(p3);
+
+    return [projectContainer1, projectContainer2, projectContainer3];
   }
 
   return {addContent};
