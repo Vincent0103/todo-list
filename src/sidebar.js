@@ -1,13 +1,15 @@
 import InboxIcon from "./assets/inbox.svg";
 import MenuDown from "./assets/menu-down.svg";
 
+let sidebarContainer;
+
 const sidebar = (() => {
   function addContent() {
-    const sidebarContainer = document.createElement("div");
+    sidebarContainer = document.createElement("div");
     sidebarContainer.classList.add("sidebar-container");
+    sidebarContainer.style.transform = "translateX(0)";
 
     sidebarContainer.append(addInboxTab(), project.addProjectsTab(), project.addProjects());
-    console.log();
 
     return sidebarContainer;
   }
@@ -25,8 +27,15 @@ const sidebar = (() => {
     return inboxTab;
   }
 
+  function slideSidebarContainer(sidebarContainer) {
+    if (sidebarContainer.style.transform === "translateX(0px)") {
+      sidebarContainer.style.transform = "translateX(min(-150px, -20vw))";
+    } else if (sidebarContainer.style.transform = "translateX(min(-150px, -20vw))") {
+      sidebarContainer.style.transform = "translateX(0px)";
+    }
+  }
 
-  return {addContent};
+  return {addContent, slideSidebarContainer};
 })();
 
 const project = (() => {
@@ -107,7 +116,6 @@ const project = (() => {
   }
 
   function changeMenuSvgState() {
-    console.log(menuSvg.style.transform === "rotate(180deg)");
     if (menuSvg.style.transform === "rotate(180deg)") {
       menuSvg.style.transform = "rotate(0deg)";
     } else if (menuSvg.style.transform === "rotate(0deg)") {
@@ -119,3 +127,4 @@ const project = (() => {
 })();
 
 export default sidebar;
+export const slideSidebarContainer = sidebar.slideSidebarContainer;

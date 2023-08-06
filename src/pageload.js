@@ -4,5 +4,8 @@ import addTodoView from "./todoView";
 
 export default function addPage() {
   const htmlContainer = document.querySelector("#content");
-  htmlContainer.append(header.addContent(), sidebar.addContent());
+  const sidebarContainer = sidebar.addContent();
+  const headerContainer = header.addContent();
+  header.listenMenuSvg(headerContainer, sidebarContainer);
+  htmlContainer.append(headerContainer, sidebarContainer);
 }

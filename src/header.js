@@ -1,11 +1,14 @@
 import MenuIcon from "./assets/menu.svg";
-
+import { slideSidebarContainer } from "./sidebar";
 
 const header = (() => {
+  let menuSvg;
+
   function addContent() {
     const headerContainer = document.createElement("div");
     headerContainer.classList.add("header-container");
-    headerContainer.innerHTML += MenuIcon
+    headerContainer.innerHTML += MenuIcon;
+
     headerContainer.appendChild(addSlogan());
 
     return headerContainer;
@@ -18,7 +21,14 @@ const header = (() => {
     return h2;
   }
 
-  return {addContent};
+  function listenMenuSvg(headerContainer, sidebarContainer) {
+    menuSvg = headerContainer.querySelector("svg");
+    menuSvg.addEventListener("click", () => {
+      slideSidebarContainer(sidebarContainer);
+    });
+  }
+
+  return {addContent, listenMenuSvg};
 })();
 
 

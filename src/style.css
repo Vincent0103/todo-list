@@ -9,11 +9,14 @@ body {
 }
 
 .header-container {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   width: 100%;
   height: 50px;
   background-color: #ef233c;
+  box-shadow: 0 0 5px rgba(0, 0, 0, .15);
 }
 
 .header-container > h2 {
@@ -28,11 +31,13 @@ body {
 }
 
 .sidebar-container {
-  width: 20vw;
+  width: clamp(150px, 20vw, 300px);
   background-color: #edf2f4;
   height: 100vh;
   padding: 10px;
   box-sizing: border-box;
+  transition: transform .2s ease-out;
+  /* box-shadow: 0 0 5px rgba(0, 0, 0, .05); */
 }
 
 .projects-tab {
@@ -70,6 +75,8 @@ body {
 }
 
 .project-container {
+  display: flex;
+  align-items: center;
   overflow: hidden;
   height: 0;
   transition: .3s ease-in-out;
