@@ -6,7 +6,8 @@ const sidebar = (() => {
     const sidebarContainer = document.createElement("div");
     sidebarContainer.classList.add("sidebar-container");
 
-    sidebarContainer.append(addInboxTab(), addProjectsTab(), addProjects());
+    sidebarContainer.append(addInboxTab(), project.addProjectsTab(), project.addProjects());
+    console.log();
 
     return sidebarContainer;
   }
@@ -24,26 +25,43 @@ const sidebar = (() => {
     return inboxTab;
   }
 
+
+  return {addContent};
+})();
+
+const project = (() => {
+  let projectsTab;
+  let projectsContainer = [];
+  let menuSvg;
+
   function addProjectsTab() {
-    const projectsTab = document.createElement("div");
+    projectsTab = document.createElement("div");
     projectsTab.classList.add("projects-tab");
 
     const p = document.createElement("p");
     p.textContent = "Projects";
     projectsTab.appendChild(p);
+    addProjectsTabSvg();
 
-    projectsTab.innerHTML += MenuDown;
+
 
     return projectsTab;
+  }
+
+  const addProjectsTabSvg = () => {
+    projectsTab.innerHTML += MenuDown;
+    menuSvg = projectsTab.querySelector("svg");
+    menuSvg.style.transform = "rotate(180deg)";
   }
 
   function addProjects() {
     const allProjectsContainer = document.createElement("div");
     allProjectsContainer.classList.add("all-projects-container");
 
-    addProjectContent().forEach(project => {
-      allProjectsContainer.appendChild(project);
+    addProjectContent().forEach(projectContent => {
+      allProjectsContainer.appendChild(projectContent);
     });
+    listenProjectsTabEvent();
 
     return allProjectsContainer;
   }
@@ -70,10 +88,34 @@ const sidebar = (() => {
     p3.textContent = "smh";
     projectContainer3.appendChild(p3);
 
+    projectsContainer.splice(0, 0, projectContainer1, projectContainer2, projectContainer3);
+
     return [projectContainer1, projectContainer2, projectContainer3];
   }
 
-  return {addContent};
+  function listenProjectsTabEvent() {
+    projectsTab.addEventListener("click", () => {
+      projectsContainer.forEach(projectContainer => {
+        if (projectContainer.classList.contains("expandable")) {
+          projectContainer.classList.remove("expandable");
+        } else if (!projectContainer.classList.contains("expandable")){
+          projectContainer.classList.add("expandable");
+        }
+      })
+      changeMenuSvgState();
+    })
+  }
+
+  function changeMenuSvgState() {
+    console.log(menuSvg.style.transform === "rotate(180deg)");
+    if (menuSvg.style.transform === "rotate(180deg)") {
+      menuSvg.style.transform = "rotate(0deg)";
+    } else if (menuSvg.style.transform === "rotate(0deg)") {
+      menuSvg.style.transform = "rotate(180deg)";
+    }
+  }
+
+  return {addProjectsTab, addProjects, addProjectContent, listenProjectsTabEvent}
 })();
 
 export default sidebar;

@@ -70,7 +70,10 @@ body {
 }
 
 .project-container {
-  padding: 10px 0;
+  overflow: hidden;
+  height: 0;
+  transition: .3s ease-in-out;
+  transition-property: height, padding;
 }
 
 .project-container:not(.project-container:last-child) {
@@ -99,4 +102,9 @@ body {
 .inbox-tab > svg {
   height: 20px;
   margin: 0 10px;
+}
+
+.project-container.expandable {
+  height: 20px;
+  padding: 10px 0;
 }
