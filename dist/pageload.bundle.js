@@ -9,6 +9,28 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/assets/inbox.svg":
+/*!******************************!*\
+  !*** ./src/assets/inbox.svg ***!
+  \******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (\"<svg xmlns=\\\"http://www.w3.org/2000/svg\\\" viewBox=\\\"0 0 24 24\\\"><path d=\\\"M19,15H15A3,3 0 0,1 12,18A3,3 0 0,1 9,15H5V5H19M19,3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3Z\\\" /></svg>\");\n\n//# sourceURL=webpack://my_package/./src/assets/inbox.svg?");
+
+/***/ }),
+
+/***/ "./src/assets/menu-down.svg":
+/*!**********************************!*\
+  !*** ./src/assets/menu-down.svg ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (\"<svg xmlns=\\\"http://www.w3.org/2000/svg\\\" viewBox=\\\"0 0 24 24\\\"><path d=\\\"M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z\\\" /></svg>\");\n\n//# sourceURL=webpack://my_package/./src/assets/menu-down.svg?");
+
+/***/ }),
+
 /***/ "./src/assets/menu.svg":
 /*!*****************************!*\
   !*** ./src/assets/menu.svg ***!
@@ -27,7 +49,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _assets_menu_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./assets/menu.svg */ \"./src/assets/menu.svg\");\n\r\n\r\nfunction addSlogan() {\r\n  const h2 = document.createElement(\"h2\");\r\n  h2.textContent = \"todowht\";\r\n\r\n  return h2;\r\n}\r\n\r\nconst addHeader = (() => {\r\n  function content() {\r\n    const headerContainer = document.createElement(\"div\");\r\n    headerContainer.classList.add(\"header-container\");\r\n    headerContainer.innerHTML += _assets_menu_svg__WEBPACK_IMPORTED_MODULE_0__[\"default\"]\r\n    headerContainer.appendChild(addSlogan());\r\n\r\n    return headerContainer;\r\n  }\r\n  return {content};\r\n})();\r\n\r\n\r\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (addHeader);\n\n//# sourceURL=webpack://my_package/./src/header.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _assets_menu_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./assets/menu.svg */ \"./src/assets/menu.svg\");\n\r\n\r\n\r\nconst header = (() => {\r\n  function addContent() {\r\n    const headerContainer = document.createElement(\"div\");\r\n    headerContainer.classList.add(\"header-container\");\r\n    headerContainer.innerHTML += _assets_menu_svg__WEBPACK_IMPORTED_MODULE_0__[\"default\"]\r\n    headerContainer.appendChild(addSlogan());\r\n\r\n    return headerContainer;\r\n  }\r\n\r\n  function addSlogan() {\r\n    const h2 = document.createElement(\"h2\");\r\n    h2.textContent = \"todowht\";\r\n\r\n    return h2;\r\n  }\r\n\r\n  return {addContent};\r\n})();\r\n\r\n\r\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (header);\n\n//# sourceURL=webpack://my_package/./src/header.js?");
 
 /***/ }),
 
@@ -38,7 +60,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ addPage)\n/* harmony export */ });\n/* harmony import */ var _header__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./header */ \"./src/header.js\");\n/* harmony import */ var _sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./sidebar */ \"./src/sidebar.js\");\n/* harmony import */ var _sidebar__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_sidebar__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _todoView__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./todoView */ \"./src/todoView.js\");\n/* harmony import */ var _todoView__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_todoView__WEBPACK_IMPORTED_MODULE_2__);\n\r\n\r\n\r\n\r\nfunction addPage() {\r\n  const htmlContainer = document.querySelector(\"#content\");\r\n  htmlContainer.appendChild(_header__WEBPACK_IMPORTED_MODULE_0__[\"default\"].content());\r\n}\n\n//# sourceURL=webpack://my_package/./src/pageload.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ addPage)\n/* harmony export */ });\n/* harmony import */ var _header__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./header */ \"./src/header.js\");\n/* harmony import */ var _sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./sidebar */ \"./src/sidebar.js\");\n/* harmony import */ var _todoView__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./todoView */ \"./src/todoView.js\");\n/* harmony import */ var _todoView__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_todoView__WEBPACK_IMPORTED_MODULE_2__);\n\r\n\r\n\r\n\r\nfunction addPage() {\r\n  const htmlContainer = document.querySelector(\"#content\");\r\n  htmlContainer.append(_header__WEBPACK_IMPORTED_MODULE_0__[\"default\"].addContent(), _sidebar__WEBPACK_IMPORTED_MODULE_1__[\"default\"].addContent());\r\n}\n\n//# sourceURL=webpack://my_package/./src/pageload.js?");
 
 /***/ }),
 
@@ -46,9 +68,10 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /*!************************!*\
   !*** ./src/sidebar.js ***!
   \************************/
-/***/ (() => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("\n\n//# sourceURL=webpack://my_package/./src/sidebar.js?");
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _assets_inbox_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./assets/inbox.svg */ \"./src/assets/inbox.svg\");\n/* harmony import */ var _assets_menu_down_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./assets/menu-down.svg */ \"./src/assets/menu-down.svg\");\n\r\n\r\n\r\nconst sidebar = (() => {\r\n  function addContent() {\r\n    const sidebarContainer = document.createElement(\"div\");\r\n    sidebarContainer.classList.add(\"sidebar-container\");\r\n\r\n    sidebarContainer.append(addProjectsTab(), addProjects());\r\n\r\n    return sidebarContainer;\r\n  }\r\n\r\n  function addProjectsTab() {\r\n    const projectsTab = document.createElement(\"div\");\r\n    projectsTab.classList.add(\"projects-tab\");\r\n\r\n    const p = document.createElement(\"p\");\r\n    p.textContent = \"Projects\";\r\n    projectsTab.appendChild(p);\r\n\r\n    projectsTab.innerHTML += _assets_menu_down_svg__WEBPACK_IMPORTED_MODULE_1__[\"default\"];\r\n\r\n    return projectsTab;\r\n  }\r\n\r\n  function addProjects() {\r\n    const allProjectsContainer = document.createElement(\"div\");\r\n    allProjectsContainer.classList.add(\"all-projects-container\");\r\n\r\n    addProjectContent().forEach(project => {\r\n      allProjectsContainer.appendChild(project);\r\n    });\r\n\r\n    return allProjectsContainer;\r\n  }\r\n\r\n  function addProjectContent() {\r\n    const projectContainer1 = document.createElement(\"div\");\r\n    projectContainer1.classList.add(\"project-container\");\r\n\r\n    const p1 = document.createElement(\"p\");\r\n    p1.textContent = \"Work\";\r\n    projectContainer1.appendChild(p1);\r\n\r\n    const projectContainer2 = document.createElement(\"div\");\r\n    projectContainer2.classList.add(\"project-container\");\r\n\r\n    const p2 = document.createElement(\"p\");\r\n    p2.textContent = \"Self\";\r\n    projectContainer2.appendChild(p2);\r\n\r\n    return [projectContainer1, projectContainer2]\r\n  }\r\n\r\n  return {addContent};\r\n})();\r\n\r\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (sidebar);\n\n//# sourceURL=webpack://my_package/./src/sidebar.js?");
 
 /***/ }),
 

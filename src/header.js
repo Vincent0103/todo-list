@@ -1,14 +1,8 @@
 import MenuIcon from "./assets/menu.svg";
 
-function addSlogan() {
-  const h2 = document.createElement("h2");
-  h2.textContent = "todowht";
 
-  return h2;
-}
-
-const addHeader = (() => {
-  function content() {
+const header = (() => {
+  function addContent() {
     const headerContainer = document.createElement("div");
     headerContainer.classList.add("header-container");
     headerContainer.innerHTML += MenuIcon
@@ -16,8 +10,16 @@ const addHeader = (() => {
 
     return headerContainer;
   }
-  return {content};
+
+  function addSlogan() {
+    const h2 = document.createElement("h2");
+    h2.textContent = "todowht";
+
+    return h2;
+  }
+
+  return {addContent};
 })();
 
 
-export default addHeader;
+export default header;

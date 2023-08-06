@@ -1,3 +1,13 @@
+body {
+  margin: 0;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: #FAFAFA;
+}
+
+* {
+  margin: 0;
+}
+
 .header-container {
   display: flex;
   align-items: center;
@@ -17,8 +27,60 @@
   cursor: pointer;
 }
 
-body {
-  margin: 0;
-  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+.sidebar-container {
+  width: 20vw;
   background-color: #edf2f4;
+  height: 100vh;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.projects-tab {
+  position: relative;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #d7dcde;
+  width: 100%;
+  height: 35px;
+  border-radius: 7px;
+}
+
+.projects-tab > p {
+  margin: 10px;
+}
+
+.projects-tab > svg {
+  height: 20px;
+  margin: 0 10px;
+  cursor: pointer;
+  transform: rotate(180deg);
+  transition: .2s all;
+}
+
+.all-projects-container {
+  background-color: #fafafa;
+  border: 1px solid #d7dcde;
+  box-shadow: 0 0 5px rgba(0, 0, 0, .15);
+  border-top: none;
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+  margin: 0 10px;
+}
+
+.project-container {
+  padding: 10px 0;
+}
+
+.project-container:not(.project-container:last-child) {
+  border-bottom: 1px solid #d7dcde;
+}
+
+.project-container:last-child {
+  border-top: 1px solid #d7dcde;
+}
+
+.project-container > p {
+  margin: 0 20px;
 }
