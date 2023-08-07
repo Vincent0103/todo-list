@@ -119,7 +119,7 @@ const sidebarHandler = (() => {
       projectsContainer.forEach(projectContainer => {
         if (projectContainer.classList.contains("expandable")) {
           projectContainer.classList.remove("expandable");
-        } else if (!projectContainer.classList.contains("expandable")){
+        } else {
           projectContainer.classList.add("expandable");
         }
       })
