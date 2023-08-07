@@ -20,6 +20,7 @@ const sidebar = (() => {
   function addInboxTab() {
     const inboxTab = document.createElement("div");
     inboxTab.classList.add("inbox-tab");
+    inboxTab.setAttribute("data-project-id", 0);
     inboxTab.innerHTML = InboxIcon;
 
     const p = document.createElement("p");
@@ -102,7 +103,7 @@ const sidebarHandler = (() => {
 
   function listenInboxTab(inboxTab) {
     inboxTab.addEventListener("click", () => {
-      todoPanel.addContent();
+      todoPanel.addContent(0);
     });
   }
 
