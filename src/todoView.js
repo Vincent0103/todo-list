@@ -14,7 +14,6 @@ const todoPanel = (() => {
     panelContainer.classList.add("panel-container");
 
     if (!currentProjectId) {
-      console.log("in inboxTab");
       const h1 = document.createElement("h1");
       h1.textContent = "Inbox";
 
@@ -41,9 +40,10 @@ const todoPanel = (() => {
 
       const desc = document.createElement("p");
       desc.classList.add("todo-desc");
-      desc.textContent = "Phasellus sodales mollis dictum. Etiam a luctus urna, eu varius ante. Integer sit amet lorem sit amet nibh finibus scelerisque eget a justo. Aliquam vulputate, quam nec aliquam semper, augue quam aliquam velit, in dapibus est leo at nulla. Ut pulvinar leo vitae ullamcorper porttitor.";
+      desc.textContent = "Phasellus sodales mollis dictum. Etiam a luctus urna, eu varius ante. Integer sit amet lorem sit amet nibh finibus scelerisque eget a justo. Aliquam vulputate, quam nec aliquam semper, augue quam aliquam velit, in dapibus est leo at nulla. Ut pulvinar leo vitae ullamcorper porttitr.";
       todoContainer.appendChild(desc);
-      todoLogic.listenTodoContainer(todoContainer);
+      todoLogic.listenTodoContainer(todoContainer, desc);
+      // todoLogic.listenTodoDesc(todoContainer, desc);
 
       return todoContainer;
     }
@@ -56,6 +56,7 @@ const todoPanel = (() => {
 
 const todoLogic = (() => {
   let projectTodoListObj = {};
+
   function addTodoObj(title, desc="", dueDate, priority, isDone=false) {
     const toStr = () => {
       return `Current todo: \"${this.title}\", desc: \"${this.desc}\", due in ${this.dueDate} of priority ${priority}`;
@@ -72,18 +73,49 @@ const todoLogic = (() => {
     }
   }
 
-  function listenTodoContainer(todoContainer) {
-    console.log(todoContainer);
-    todoContainer.addEventlistener("click", () => {
+  function listenTodoContainer(todoContainer, todoDesc) {
+    todoContainer.addEventListener("click", () => {
       if (!todoContainer.classList.contains("expandable")) {
         todoContainer.classList.add("expandable");
+        listenTodoDesc(todoContainer, todoDesc);
       } else {
         todoContainer.classList.remove("expandable");
+
+        // removes inline styling from js
+        todoContainer.style.gridTemplateRows = null;
       }
     });
   }
 
-  return {addTodoObj, listenTodoContainer};
+  function listenTodoDesc(todoContainer, todoDesc) {
+    let descHeight;
+    let originalTodoDesc = todoDesc.textContent;
+
+
+    // create an Observer instance
+    const resizeObserver = new ResizeObserver(entries => {
+      console.log('Body height changed:', entries[0].target.clientHeight);
+      descHeight = entries[0].target.clientHeight;
+
+      changeGridTemplateRowHeight();
+    });
+
+    // start observing a DOM node
+    resizeObserver.observe(todoDesc);
+
+    // makes it so the todoDesc content doesn't overflow in a manner of dynamicity
+    function changeGridTemplateRowHeight() {
+      if (todoContainer.classList.contains("expandable")) {
+        if (descHeight <= 116) {
+          todoContainer.style.gridTemplateRows = `auto ${descHeight + 20}px`;
+        } else {
+          todoContainer.style.gridTemplateRows = `auto ${136}px`;
+        }
+      }
+    }
+  }
+
+  return {addTodoObj, listenTodoContainer, listenTodoDesc};
 })();
 
 export default todoPanel;
