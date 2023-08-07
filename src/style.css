@@ -31,13 +31,21 @@ body {
 }
 
 .sidebar-container {
-  width: clamp(150px, 20vw, 300px);
   background-color: #edf2f4;
-  height: 100vh;
+  width: clamp(150px, 20vw, 300px);
   padding: 10px;
+  height: 100vh;
   box-sizing: border-box;
-  transition: transform .2s ease-out;
-  /* box-shadow: 0 0 5px rgba(0, 0, 0, .05); */
+  transition: all .2s ease-out;
+}
+
+.slideable {
+  width: 0;
+  padding: 0;
+}
+
+.slideable * {
+  display: none;
 }
 
 .projects-tab {
@@ -103,7 +111,15 @@ body {
 .inbox-tab {
   display: flex;
   align-items: center;
-  margin: 10px 0;
+  margin: 5px 0;
+  width: 100%;
+  height: 35px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.inbox-tab:hover {
+  background-color: #d7dcde;
 }
 
 .inbox-tab > svg {
@@ -114,4 +130,13 @@ body {
 .project-container.expandable {
   height: 20px;
   padding: 10px 0;
+}
+
+.sidebar-panel-container {
+  display: flex;
+}
+
+.panel-container {
+  padding: 20px;
+  padding-left: 60px;
 }

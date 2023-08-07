@@ -1,13 +1,16 @@
 import InboxIcon from "./assets/inbox.svg";
 import MenuDown from "./assets/menu-down.svg";
+import todoPanel from "./todoView";
 
 let sidebarContainer;
+let menuSvg;
+let projectsTab;
+let projectsContainer = [];
 
 const sidebar = (() => {
   function addContent() {
     sidebarContainer = document.createElement("div");
     sidebarContainer.classList.add("sidebar-container");
-    sidebarContainer.style.transform = "translateX(0)";
 
     sidebarContainer.append(addInboxTab(), project.addProjectsTab(), project.addProjects());
 
@@ -17,31 +20,20 @@ const sidebar = (() => {
   function addInboxTab() {
     const inboxTab = document.createElement("div");
     inboxTab.classList.add("inbox-tab");
-
     inboxTab.innerHTML = InboxIcon;
 
     const p = document.createElement("p");
     p.textContent = "Inbox";
     inboxTab.appendChild(p);
+    sidebarHandler.listenInboxTab(inboxTab);
 
     return inboxTab;
   }
 
-  function slideSidebarContainer(sidebarContainer) {
-    if (sidebarContainer.style.transform === "translateX(0px)") {
-      sidebarContainer.style.transform = "translateX(min(-150px, -20vw))";
-    } else if (sidebarContainer.style.transform = "translateX(min(-150px, -20vw))") {
-      sidebarContainer.style.transform = "translateX(0px)";
-    }
-  }
-
-  return {addContent, slideSidebarContainer};
+  return {addContent};
 })();
 
 const project = (() => {
-  let projectsTab;
-  let projectsContainer = [];
-  let menuSvg;
 
   function addProjectsTab() {
     projectsTab = document.createElement("div");
@@ -51,8 +43,6 @@ const project = (() => {
     p.textContent = "Projects";
     projectsTab.appendChild(p);
     addProjectsTabSvg();
-
-
 
     return projectsTab;
   }
@@ -70,7 +60,7 @@ const project = (() => {
     addProjectContent().forEach(projectContent => {
       allProjectsContainer.appendChild(projectContent);
     });
-    listenProjectsTabEvent();
+    sidebarHandler.listenProjectsTabEvent();
 
     return allProjectsContainer;
   }
@@ -82,6 +72,7 @@ const project = (() => {
     const p1 = document.createElement("p");
     p1.textContent = "Work";
     projectContainer1.appendChild(p1);
+    projectContainer1.setAttribute("data-project-id", 1);
 
     const projectContainer2 = document.createElement("div");
     projectContainer2.classList.add("project-container");
@@ -89,6 +80,7 @@ const project = (() => {
     const p2 = document.createElement("p");
     p2.textContent = "Self";
     projectContainer2.appendChild(p2);
+    projectContainer2.setAttribute("data-project-id", 2);
 
     const projectContainer3 = document.createElement("div");
     projectContainer3.classList.add("project-container");
@@ -96,10 +88,30 @@ const project = (() => {
     const p3 = document.createElement("p");
     p3.textContent = "smh";
     projectContainer3.appendChild(p3);
+    projectContainer3.setAttribute("data-project-id", 3);
 
     projectsContainer.splice(0, 0, projectContainer1, projectContainer2, projectContainer3);
 
     return [projectContainer1, projectContainer2, projectContainer3];
+  }
+
+  return {addProjectsTab, addProjects, addProjectContent}
+})();
+
+const sidebarHandler = (() => {
+
+  function listenInboxTab(inboxTab) {
+    inboxTab.addEventListener("click", () => {
+      todoPanel.addContent();
+    });
+  }
+
+  function slideSidebarContainer(sidebarContainer) {
+    if (sidebarContainer.classList.contains("slideable")) {
+      sidebarContainer.classList.remove("slideable");
+    } else if (!sidebarContainer.classList.contains("slideable")) {
+      sidebarContainer.classList.add("slideable");
+    }
   }
 
   function listenProjectsTabEvent() {
@@ -123,8 +135,8 @@ const project = (() => {
     }
   }
 
-  return {addProjectsTab, addProjects, addProjectContent, listenProjectsTabEvent}
+  return {listenInboxTab, listenProjectsTabEvent, slideSidebarContainer};
 })();
 
 export default sidebar;
-export const slideSidebarContainer = sidebar.slideSidebarContainer;
+export const slideSidebarContainer = sidebarHandler.slideSidebarContainer;
