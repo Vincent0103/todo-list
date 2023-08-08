@@ -1,4 +1,5 @@
 import CloseIcon from "./assets/close-thick.svg";
+import CheckIcon from "./assets/check-bold.svg";
 
 const formPanel = (() => {
   let darkenBodyDiv;
@@ -37,6 +38,8 @@ const formPanel = (() => {
         const titleInput = document.createElement("input");
         titleInput.classList.add("input-container");
         titleInput.classList.add("title-input");
+        titleInput.minLength = 3;
+        titleInput.maxLength = 60;
         titleInput.placeholder = "Title*";
 
         return titleInput;
@@ -55,6 +58,7 @@ const formPanel = (() => {
         const descInput = document.createElement("textarea");
         descInput.classList.add("input-container");
         descInput.classList.add("desc-input");
+        descInput.maxLength = 160;
         descInput.placeholder = "Description";
 
         return descInput;
@@ -88,6 +92,7 @@ const formPanel = (() => {
         const addBtn = document.createElement("button");
         addBtn.type = "submit";
         addBtn.textContent = "ADD";
+        formPanelLogic.listenAddBtn(addBtn, panelFormContainer);
 
         return addBtn;
       }
@@ -101,11 +106,9 @@ const formPanel = (() => {
     return darkenBodyDiv;
   }
 
-  function displayColorOptions(colorOptionsContainer) {
-    if (!colorOptionsContainer.classList.contains("show-container")) {
+  function displayColorOptions(colorOptionsContainer, type=null) {
+    if (!colorOptionsContainer.classList.contains("show-container") && type === null) {
       colorOptionsContainer.classList.add("show-container");
-      colorOptionsContainer.classList.add("input-container");
-      colorOptionsContainer.classList.add("color-options-container");
       colorOptionsContainer.style.display = "flex";
 
       const panelFormContainer = getFormContainer().querySelector(".panel-form-container");
@@ -118,15 +121,18 @@ const formPanel = (() => {
       function addOptions() {
         const option1 = document.createElement("div");
         option1.classList.add("color-options");
-        option1.classList.add("color-option-red");
+        option1.style.backgroundColor = "red";
+        option1.style.border = "1px solid rgb(206, 0, 0)"
 
         const option2 = document.createElement("div");
         option2.classList.add("color-options");
-        option2.classList.add("color-option-orange");
+        option2.style.backgroundColor = "orange";
+        option2.style.border = "1px solid rgb(209, 136, 0)"
 
         const option3 = document.createElement("div");
         option3.classList.add("color-options");
-        option3.classList.add("color-option-blue");
+        option3.style.backgroundColor = "blue";
+        option3.style.border = "1px solid rgb(0, 0, 212)"
 
         function addOptionsSeperator() {
           const optionsSeperator = document.createElement("p");
@@ -137,20 +143,61 @@ const formPanel = (() => {
 
         const option4 = document.createElement("div");
         option4.classList.add("color-options");
-        option4.classList.add("color-option-gray");
+        option4.style.backgroundColor = "gray";
+        option4.style.border = "1px solid rgb(92, 92, 92)"
 
         return [option1, option2, option3, addOptionsSeperator(), option4];
       }
     } else {
-      colorOptionsContainer.classList.remove("show-container");
-      colorOptionsContainer.classList.remove("input-container");
-      colorOptionsContainer.classList.remove("color-options-container");
-      colorOptionsContainer.style.display = "none";
-      colorOptionsContainer.innerHTML = "";
+      addAnimation(colorOptionsContainer, "fadeOut", .2)
+      setTimeout(() => {
+        colorOptionsContainer.classList.remove("show-container");
+        addAnimation(colorOptionsContainer, "fadeIn", .2)
+        colorOptionsContainer.style.display = "none";
+        colorOptionsContainer.innerHTML = "";
+      }, 180);
+    }
+
+  }
+
+  function changePriorityColor(priorityInput, bgc, borderColor) {
+    priorityInput.style.backgroundColor = bgc;
+    priorityInput.style.borderColor = borderColor;
+  }
+
+  function addAnimation(element, type, timing) {
+    element.style.animation = `${String(timing)}s ${type}`;
+  }
+
+
+  function addSuccessMessage() {
+    const darkenBodyDiv = getFormContainer();
+    const panelFormContainer = darkenBodyDiv.querySelector(".panel-form-container");
+    const panelFormContainerChildrens = panelFormContainer.querySelectorAll("*");
+    console.log(darkenBodyDiv);
+    startSuccessAnimationBundle();
+
+
+    function startSuccessAnimationBundle() {
+      formPanel.addAnimation(panelFormContainer, "success", 2);
+      panelFormContainerChildrens.forEach(children => {
+        formPanel.addAnimation(children, "fadeOut", .2);
+      })
+      setTimeout(() => {
+        panelFormContainer.innerHTML = "";
+        panelFormContainer.classList.add("success-container");
+
+        panelFormContainer.innerHTML += CheckIcon;
+        formPanel.addAnimation(panelFormContainer.querySelector("svg"), "fadeIn", .5);
+      }, 190);
+      setTimeout(() => {
+        formPanel.addAnimation(darkenBodyDiv, "fadeOut", .5);
+        setTimeout(() => darkenBodyDiv.remove(), 490);
+      }, 1300);
     }
   }
 
-  return {displayFormContainer, getFormContainer, displayColorOptions};
+  return {displayFormContainer, getFormContainer, displayColorOptions, changePriorityColor, addAnimation, addSuccessMessage};
 })()
 
 const formPanelLogic = (() => {
@@ -158,25 +205,53 @@ const formPanelLogic = (() => {
     closeBtn.addEventListener('click', () => {
       const darkenBodyDiv = formPanel.getFormContainer();
       const panelFormContainer = darkenBodyDiv.querySelector(".panel-form-container");
-      panelFormContainer.style.animation = ".5s slideCenterOut";
-      darkenBodyDiv.style.animation = ".5s fadeOut";
+      formPanel.addAnimation(panelFormContainer, "slideCenterOut", .5);
+      formPanel.addAnimation(darkenBodyDiv, "fadeOut", .5);
       setTimeout(() => {
         darkenBodyDiv.remove();
         panelFormContainer.remove();
-        console.log("removing");
       }, 495);
     })
   }
 
   function listenPriorityInput(priorityInput) {
     const colorOptionsContainer = document.createElement("div");
+    colorOptionsContainer.classList.add("color-options-container");
 
     priorityInput.addEventListener("click", () => {
       formPanel.displayColorOptions(colorOptionsContainer);
+      listenColorOptions(colorOptionsContainer);
+      window.addEventListener("click", e => {
+        if (!e.target.getAttribute("id", "priority-input")) {
+          formPanel.displayColorOptions(colorOptionsContainer, "window");
+        }
+      })
     })
+
+
+
+    function listenColorOptions() {
+      const colorOptions = colorOptionsContainer.querySelectorAll(".color-options");
+
+      colorOptions.forEach(option => {
+        option.addEventListener("click", () => {
+          const bgc = option.style.backgroundColor;
+          const borderColor = option.style.borderColor;
+          formPanel.changePriorityColor(priorityInput, bgc, borderColor);
+        })
+      })
+    }
   }
 
-  return {listenCloseBtn, listenPriorityInput};
+
+  function listenAddBtn(addBtn, panelFormContainer) {
+    addBtn.addEventListener("click", e => {
+      e.preventDefault();
+      formPanel.addSuccessMessage(panelFormContainer);
+    });
+  }
+
+  return {listenCloseBtn, listenPriorityInput, listenAddBtn};
 })()
 
 export default formPanel;

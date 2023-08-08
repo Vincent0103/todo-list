@@ -287,7 +287,18 @@ body {
   100% {
     transform: scale(0) rotate(-15deg);
   }
+}
 
+@keyframes success {
+  40% {
+    transform: translateY(0);
+  }
+  60% {
+    transform: translateY(30%);
+  }
+  100% {
+    transform: translateY(-200%);
+  }
 }
 
 .panel-form-container {
@@ -320,12 +331,19 @@ body {
   border: 1px solid rgb(218, 0, 0);
   cursor: pointer;
   border-radius: 5px;
+  transition: transform .2s;
 }
+
 
 .close-form-btn > svg {
   fill: white;
   height: 20px;
   width: 20px;
+  transition: all .2s;
+}
+
+.close-form-btn:hover > svg {
+  transform: rotate(90deg);
 }
 
 .panel-form-container > h1 {
@@ -355,8 +373,21 @@ body {
   font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
+
 .input-container:not(#priority-input) {
   padding-left: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, .05);
+  border-width: 1px;
+  transition: box-shadow .1s;
+}
+
+.input-container:not(#priority-input):hover,
+.input-container:not(#priority-input):focus {
+  box-shadow: 0 0 5px rgba(0, 0, 0, .10);
+}
+
+.input-container:not(#priority-input):focus {
+  border-width: 1.5px;
 }
 
 .title-input {
@@ -386,16 +417,17 @@ body {
 
 #priority-input {
   appearance: none;
-  background-color: red;
-  border: 2px solid rgb(204, 5, 5);
+  background-color: gray;
+  border: 2px solid rgb(92, 92, 92);
   border-radius: 50%;
   height: 15px;
   width: 15px;
   cursor: pointer;
+  transition: all .2s;
 }
 
-.select-options {
-  background-color: red;
+#priority-input:hover {
+  transform: scale(1.1);
 }
 
 .color-options-container {
@@ -410,6 +442,7 @@ body {
   box-shadow: 0 0 5px rgba(0, 0, 0, .05);
   bottom: 62px;
   left: 115px;
+  animation: fadeIn .2s;
 }
 
 .color-options {
@@ -419,29 +452,10 @@ body {
   border-radius: 50%;
 }
 
-.color-option-red {
-  background-color: red;
-  border: 1px solid rgb(206, 0, 0);
-}
-
-.color-option-orange {
-  background-color: orange;
-  border: 1px solid rgb(209, 136, 0);
-}
-
-.color-option-blue {
-  background-color: blue;
-  border: 1px solid rgb(0, 0, 212);
-}
-
-.color-option-gray {
-  background-color: gray;
-  border: 1px solid rgb(92, 92, 92);
-}
-
 .color-options-container > p {
   margin: 0;
   color: #c8c8c8;
+  user-select: none;
 }
 
 .form-input-container > button[type="submit"] {
@@ -452,6 +466,26 @@ body {
   color: white;
   background-image: linear-gradient(#3b3e5d, #2b2d42);
   border: 1px solid #161723;
+  box-shadow: 0 0 5px rgba(0, 0, 0, .05);
   cursor: pointer;
   border-radius: 5px;
+  transition: transform .2s;
+}
+
+.form-input-container > button[type="submit"]:hover {
+  transform: scale(1.1);
+}
+
+.success-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.success-container > p {
+  font-size: 4rem;
+}
+
+.success-container > svg {
+  height: 80%;
 }
