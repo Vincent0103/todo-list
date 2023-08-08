@@ -31,7 +31,7 @@ const formPanel = (() => {
     function addFormInputPanel() {
       const form = document.createElement("form");
       form.classList.add("form-input-container");
-      form.append(addTitleInput(), addDueDate(), addDescInput());
+      form.append(addTitleInput(), addDueDate(), addDescInput(), addPriorityDiv());
 
       function addTitleInput() {
         const titleInput = document.createElement("input");
@@ -44,7 +44,9 @@ const formPanel = (() => {
 
       function addDueDate() {
         const dateInput = document.createElement("input");
-        dateInput.type = "date";
+        dateInput.classList.add("input-container");
+        dateInput.classList.add("date-input");
+        dateInput.type = "datetime-local";
 
         return dateInput;
       }
@@ -57,6 +59,31 @@ const formPanel = (() => {
 
         return descInput;
       }
+
+      function addPriorityDiv() {
+        const priorityDiv = document.createElement("div");
+        priorityDiv.classList.add("priority-container");
+        priorityDiv.append(addPriorityLabel(), addPriorityInput());
+
+        function addPriorityLabel() {
+          const priorityLabel = document.createElement("label");
+          priorityLabel.setAttribute("for", "priority-input");
+          priorityLabel.textContent = "Priority: ";
+          return priorityLabel;
+        }
+
+        function addPriorityInput() {
+          const prioritySelect = document.createElement("div");
+          prioritySelect.classList.add("input-container");
+          prioritySelect.setAttribute("id", "priority-input");
+          // formPanelLogic.listenPriorityInput(prioritySelect);
+
+          return prioritySelect;
+        }
+
+        return priorityDiv;
+      }
+
 
       return form;
     }
@@ -84,6 +111,12 @@ const formPanelLogic = (() => {
       }, 495);
     })
   }
+
+  // function listenPriorityInput(priorityInput) {
+  //   priorityInput.addEventListener("click", () => {
+
+  //   })
+  // }
 
   return {listenCloseBtn};
 })()
