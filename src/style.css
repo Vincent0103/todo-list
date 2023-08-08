@@ -199,7 +199,7 @@ body {
   transform: rotate(0deg);
 }
 
-.todo-form-container {
+.todo-form-btn-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -209,24 +209,72 @@ body {
   box-shadow: 0 0 5px rgba(0, 0, 0, .15);
 }
 
-.todo-form-container > svg {
+.todo-form-btn-container > svg {
   fill: white;
   transition: all .2s;
 }
 
-.todo-form-container:hover > svg {
+.todo-form-btn-container:hover > svg {
   height: 30px;
   width: 30px;
   transform: rotate(90deg);
 }
 
-.todo-form-container > p {
+.todo-form-btn-container > p {
   color: white;
   font-size: 1.1rem;
   font-weight: bold;
   transition: font-size .2s;
 }
 
-.todo-form-container:hover > p {
+.todo-form-btn-container:hover > p {
   font-size: 1.2rem;
+}
+
+.todo-form-container {
+  height: 80vh;
+  width: 70vh;
+  background-color: white;
+  border-radius: 10px;
+}
+
+
+.darken-body-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .8);
+  animation: .5s fadeIn;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    transform: scale(0) rotate(45deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.panel-form-container {
+  height: 80%;
+  width: 50%;
+  background-color: white;
+  border-radius: 10px;
+  border: 5px solid #c8c8c8;
+  animation: .5s slideUp;
 }

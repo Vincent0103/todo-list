@@ -8,6 +8,7 @@ module.exports = {
     header: "./src/header.js",
     sidebar: "./src/sidebar.js",
     todoView: "./src/todoView.js",
+    formView: "./src/formView.js",
   },
   output: {
     filename: "[name].bundle.js",
