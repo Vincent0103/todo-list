@@ -1,4 +1,4 @@
-
+import CloseIcon from "./assets/close-thick.svg";
 
 const formPanel = (() => {
   let darkenBodyDiv;
@@ -14,7 +14,7 @@ const formPanel = (() => {
 
     function addCloseBtn() {
       const closeBtn = document.createElement("btn");
-      closeBtn.textContent = "Close";
+      closeBtn.innerHTML = CloseIcon;
       closeBtn.classList.add("close-form-btn");
       formPanelLogic.listenCloseBtn(closeBtn);
 
@@ -31,7 +31,7 @@ const formPanel = (() => {
     function addFormInputPanel() {
       const form = document.createElement("form");
       form.classList.add("form-input-container");
-      form.append(addTitleInput(), addDueDate(), addDescInput(), addPriorityDiv());
+      form.append(addTitleInput(), addDueDate(), addDescInput(), addPriorityDiv(), addAddBtn());
 
       function addTitleInput() {
         const titleInput = document.createElement("input");
@@ -84,6 +84,13 @@ const formPanel = (() => {
         return priorityDiv;
       }
 
+      function addAddBtn() {
+        const addBtn = document.createElement("button");
+        addBtn.type = "submit";
+        addBtn.textContent = "ADD";
+
+        return addBtn;
+      }
 
       return form;
     }
