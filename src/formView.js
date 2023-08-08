@@ -76,7 +76,7 @@ const formPanel = (() => {
           const prioritySelect = document.createElement("div");
           prioritySelect.classList.add("input-container");
           prioritySelect.setAttribute("id", "priority-input");
-          // formPanelLogic.listenPriorityInput(prioritySelect);
+          formPanelLogic.listenPriorityInput(prioritySelect);
 
           return prioritySelect;
         }
@@ -94,7 +94,56 @@ const formPanel = (() => {
     return darkenBodyDiv;
   }
 
-  return {displayFormContainer, getFormContainer};
+  function displayColorOptions(colorOptionsContainer) {
+    if (!colorOptionsContainer.classList.contains("show-container")) {
+      colorOptionsContainer.classList.add("show-container");
+      colorOptionsContainer.classList.add("input-container");
+      colorOptionsContainer.classList.add("color-options-container");
+      colorOptionsContainer.style.display = "flex";
+
+      const panelFormContainer = getFormContainer().querySelector(".panel-form-container");
+
+      addOptions().forEach(option => {
+        colorOptionsContainer.appendChild(option);
+      })
+      panelFormContainer.appendChild(colorOptionsContainer);
+
+      function addOptions() {
+        const option1 = document.createElement("div");
+        option1.classList.add("color-options");
+        option1.classList.add("color-option-red");
+
+        const option2 = document.createElement("div");
+        option2.classList.add("color-options");
+        option2.classList.add("color-option-orange");
+
+        const option3 = document.createElement("div");
+        option3.classList.add("color-options");
+        option3.classList.add("color-option-blue");
+
+        function addOptionsSeperator() {
+          const optionsSeperator = document.createElement("p");
+          optionsSeperator.textContent = "|";
+
+          return optionsSeperator;
+        }
+
+        const option4 = document.createElement("div");
+        option4.classList.add("color-options");
+        option4.classList.add("color-option-gray");
+
+        return [option1, option2, option3, addOptionsSeperator(), option4];
+      }
+    } else {
+      colorOptionsContainer.classList.remove("show-container");
+      colorOptionsContainer.classList.remove("input-container");
+      colorOptionsContainer.classList.remove("color-options-container");
+      colorOptionsContainer.style.display = "none";
+      colorOptionsContainer.innerHTML = "";
+    }
+  }
+
+  return {displayFormContainer, getFormContainer, displayColorOptions};
 })()
 
 const formPanelLogic = (() => {
@@ -112,13 +161,15 @@ const formPanelLogic = (() => {
     })
   }
 
-  // function listenPriorityInput(priorityInput) {
-  //   priorityInput.addEventListener("click", () => {
+  function listenPriorityInput(priorityInput) {
+    const colorOptionsContainer = document.createElement("div");
 
-  //   })
-  // }
+    priorityInput.addEventListener("click", () => {
+      formPanel.displayColorOptions(colorOptionsContainer);
+    })
+  }
 
-  return {listenCloseBtn};
+  return {listenCloseBtn, listenPriorityInput};
 })()
 
 export default formPanel;
