@@ -1,5 +1,7 @@
 import CloseIcon from "./assets/close-thick.svg";
 import CheckIcon from "./assets/check-bold.svg";
+import { addTodoContainer } from "./todoView";
+import { todoLogicModule } from "./todoView";
 
 const formPanel = (() => {
   let darkenBodyDiv;
@@ -175,6 +177,8 @@ const formPanel = (() => {
   function changePriorityColor(priorityInput, bgc, borderColor) {
     priorityInput.style.backgroundColor = bgc;
     priorityInput.style.borderColor = borderColor;
+
+    priorityInput.setAttribute("value", bgc);
   }
 
   function addAnimation(element, type, timing) {
@@ -186,7 +190,6 @@ const formPanel = (() => {
     const darkenBodyDiv = getFormContainer();
     const panelFormContainer = darkenBodyDiv.querySelector(".panel-form-container");
     const panelFormContainerChildrens = panelFormContainer.querySelectorAll("*");
-    console.log(darkenBodyDiv);
     startSuccessAnimationBundle();
 
 
@@ -263,11 +266,14 @@ const formPanelLogic = (() => {
       let areValidInputs = checkFormValidity(inputContainers);
 
       if (areValidInputs) {
-        inputContainers.forEach(input => {
-          console.log(input.value);
-          console.log(priorityInput.getAttribute("value"));
-        });
-        // formPanel.addSuccessMessage(panelFormContainer);
+        const title = inputContainers[0].value;
+        const date = inputContainers[1].value;
+        const desc = inputContainers[2].value;
+        const priority = priorityInput.getAttribute("value");
+        console.log(priority);
+        const formTodoObj = todoLogicModule.objects.addTodoObj(title, desc, date, priority);
+        addTodoContainer(formTodoObj, 0);
+        formPanel.addSuccessMessage(panelFormContainer);
       }
     });
 

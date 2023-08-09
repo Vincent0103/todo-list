@@ -343,7 +343,7 @@ body {
 }
 
 .close-form-btn:hover > svg {
-  transform: rotate(90deg);
+  transform: rotate(-90deg);
 }
 
 .panel-form-container > h1 {
@@ -487,4 +487,8 @@ body {
 
 .success-container > svg {
   height: 80%;
+}
+
+.panel-container > .todo-container:first-child {
+  background-color: red;
 }

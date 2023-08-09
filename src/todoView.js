@@ -4,13 +4,14 @@ import formPanel from "./formView";
 
 const panel = (() => {
   let currentProjectId = false;
+  let panelContainer;
 
   function addContent(projectId=0) {
     currentProjectId = projectId;
     return getProperPanelDisplay();
 
     function getProperPanelDisplay() {
-      const panelContainer = document.createElement("div");
+      panelContainer = document.createElement("div");
       panelContainer.classList.add("panel-container");
 
       if (currentProjectId === 0) {
@@ -20,7 +21,7 @@ const panel = (() => {
         const hr = document.createElement("hr");
 
         panelContainer.append(h1, hr);
-        todo.addTodoContent(panelContainer);
+        todo.addTodoContent(panelContainer, currentProjectId);
       }
 
 
@@ -29,35 +30,48 @@ const panel = (() => {
   }
 
   const todo = (() => {
-    function addTodoContent(panelContainer) {
+    function addTodoContent(panelContainer, projectId) {
       addTodoTemplateContent();
 
-      let inboxProjectTodos = todoLogic.objects.getProjectsTodoListObj()[0];
+      let inboxProjectTodos = todoLogic.objects.getProjectsTodoListObj()[projectId];
       panelContainer.appendChild(addTodoFormBtnLink());
+      console.log(todoLogic.objects.getProjectsTodoListObj());
 
-      inboxProjectTodos.forEach(todoData => {
-        const todoContainer = document.createElement("div");
-        todoContainer.classList.add("todo-container");
-
-        const checkMarkContainer = document.createElement("div");
-        checkMarkContainer.classList.add("check-mark-container");
-
-        const title = document.createElement("p");
-        title.textContent = todoData.title;
-
-        const dueDate = document.createElement("p");
-        dueDate.textContent = todoLogic.convertDate(todoData.dueDate);
-        todoContainer.append(checkMarkContainer, title, dueDate);
-        todoContainer.innerHTML += MenuDown;
-
-        const desc = document.createElement("p");
-        desc.classList.add("todo-desc");
-        desc.textContent = todoData.desc;
-        todoContainer.appendChild(desc);
-        todoLogic.listeners.listenTodoContainer(todoContainer, desc);
-
-        panelContainer.appendChild(todoContainer);
+      inboxProjectTodos.forEach(todo => {
+        addTodoContainer(todo, projectId)
       })
+    }
+
+    function addTodoContainer(currentTodoObj) {
+      const panelContainer = getPanelContainer();
+
+      const todoContainer = document.createElement("div");
+      todoContainer.classList.add("todo-container");
+
+      const checkMarkContainer = document.createElement("div");
+      checkMarkContainer.classList.add("check-mark-container");
+      todoContainer.style.borderColor = currentTodoObj.priority;
+
+      const title = document.createElement("p");
+      title.textContent = currentTodoObj.title;
+
+      const dueDate = document.createElement("p");
+      dueDate.textContent = todoLogic.convertDate(currentTodoObj.dueDate);
+      todoContainer.append(checkMarkContainer, title, dueDate);
+      todoContainer.innerHTML += MenuDown;
+
+      const desc = document.createElement("p");
+      desc.classList.add("todo-desc");
+      desc.textContent = currentTodoObj.desc;
+      todoContainer.appendChild(desc);
+      todoLogic.listeners.listenTodoContainer(todoContainer, desc);
+      insertBeforeDiv();
+
+      function insertBeforeDiv() {
+        const insertBeforeDiv = panelContainer.querySelector(".todo-container:nth-child(4)");
+        panelContainer.insertBefore(todoContainer, insertBeforeDiv);
+      }
+
     }
 
     function addTodoFormBtnLink() {
@@ -105,7 +119,11 @@ const panel = (() => {
       todoLogic.objects.addProjectTodoList(0, currentTodoObj);
     }
 
-    return {addTodoContent, addTodoFormBtnLink, addTodoTemplateContent};
+    function getPanelContainer() {
+      return panelContainer;
+    }
+
+    return {addTodoContent, addTodoContainer};
   })()
 
   return {addContent, todo};
@@ -124,21 +142,21 @@ const todoLogic = (() => {
       if (!(projectId in projectsTodoListObj)) {
         projectsTodoListObj[projectId] = [todoObj];
       } else {
-        projectsTodoListObj[projectId].push(todoObj);
+        projectsTodoListObj[projectId].unshift(todoObj);
       }
     }
 
-    function addTodoObj(title, desc="", dueDate=null, priority=0, isDone=false) {
+    function addTodoObj(title, desc="", dueDate="", priority="gray", isDone=false) {
       if (desc.length >= 160) {
         throw new Error(`Description is longer than 160 characters! \n${desc}`);
       } else if (title.length <= 3 || title.length >= 60) {
         throw new Error(`title is less than 3 characters or longer than 60 characters! \n${title}`);
-      } else if (dueDate !== null && !matchValidDate(dueDate)) {
+      } else if (dueDate !== "" && !matchValidDate(dueDate)) {
         throw new Error(`Invalid date format! \n${dueDate}`);
       }
 
       const toStr = () => {
-        return `Current todo: \"${this.title}\", desc: \"${this.desc}\", due in ${this.dueDate} of priority ${priority}`;
+        return `Current todo: \"${title}\", desc: \"${desc}\", due in ${dueDate} of priority ${priority}`;
       }
 
       return {title, desc, dueDate, priority, isDone, toStr};
@@ -203,7 +221,7 @@ const todoLogic = (() => {
   }
 
   function convertDate(str) {
-    return (str === null)
+    return (str === "")
     ? ""
     : str.substring(0, str.indexOf("T"))
      + " at " +
@@ -214,3 +232,5 @@ const todoLogic = (() => {
 })();
 
 export default panel;
+export const addTodoContainer = panel.todo.addTodoContainer;
+export const todoLogicModule = todoLogic;
