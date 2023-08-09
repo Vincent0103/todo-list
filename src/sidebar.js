@@ -1,6 +1,7 @@
 import InboxIcon from "./assets/inbox.svg";
 import MenuDown from "./assets/menu-down.svg";
 import todoPanel from "./todoView";
+import addPage from "./pageload";
 
 let sidebarContainer;
 let menuSvg;
@@ -12,7 +13,7 @@ const sidebar = (() => {
     sidebarContainer = document.createElement("div");
     sidebarContainer.classList.add("sidebar-container");
 
-    sidebarContainer.append(addInboxTab(), project.addProjectsTab(), project.addProjects());
+    sidebarContainer.append(addInboxTab(), project.addProjectsTab(), project.addProjects(), project.addProjectCreatorTab());
 
     return sidebarContainer;
   }
@@ -31,7 +32,13 @@ const sidebar = (() => {
     return inboxTab;
   }
 
-  return {addContent};
+  function changeSidebarContainerState(contentHeader, projectId) {
+    const sidebarPanelContainer = addPage.getSidebarPanelContainer();
+    sidebarPanelContainer.removeChild(sidebarPanelContainer.querySelector(".panel-container"));
+    sidebarPanelContainer.appendChild(todoPanel.addContent(contentHeader, projectId));
+  }
+
+  return {addContent, changeSidebarContainerState};
 })();
 
 const project = (() => {
@@ -92,18 +99,26 @@ const project = (() => {
     projectContainer3.setAttribute("data-project-id", 3);
 
     projectsContainer.splice(0, 0, projectContainer1, projectContainer2, projectContainer3);
+    sidebarHandler.listenProjectsContainers();
 
     return [projectContainer1, projectContainer2, projectContainer3];
   }
 
-  return {addProjectsTab, addProjects, addProjectContent}
+  function addProjectCreatorTab() {
+    const projectCreatorContainer = document.createElement("div");
+    projectCreatorContainer.classList.add("project-creator-container");
+
+    return projectCreatorContainer;
+  }
+
+  return {addProjectsTab, addProjects, addProjectContent, addProjectCreatorTab}
 })();
 
 const sidebarHandler = (() => {
 
   function listenInboxTab(inboxTab) {
     inboxTab.addEventListener("click", () => {
-      todoPanel.addContent(0);
+      sidebar.changeSidebarContainerState("Inbox", 0);
     });
   }
 
@@ -128,6 +143,15 @@ const sidebarHandler = (() => {
     })
   }
 
+  function listenProjectsContainers() {
+    projectsContainer.forEach(projectContainer => {
+      projectContainer.addEventListener("click", () => {
+        const p = projectContainer.querySelector("p");
+        sidebar.changeSidebarContainerState(p.textContent, projectContainer.getAttribute("data-project-id"));
+      })
+    })
+  }
+
   function changeMenuSvgState() {
     if (menuSvg.style.transform === "rotate(180deg)") {
       menuSvg.style.transform = "rotate(0deg)";
@@ -136,7 +160,7 @@ const sidebarHandler = (() => {
     }
   }
 
-  return {listenInboxTab, listenProjectsTabEvent, slideSidebarContainer};
+  return {listenInboxTab, listenProjectsTabEvent, listenProjectsContainers, slideSidebarContainer};
 })();
 
 export default sidebar;

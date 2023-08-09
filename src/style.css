@@ -9,7 +9,7 @@ body {
 }
 
 .header-container {
-  position: relative;
+  position: fixed;
   z-index: 1;
   display: flex;
   align-items: center;
@@ -31,6 +31,10 @@ body {
 }
 
 .sidebar-container {
+  display: grid;
+  position: fixed;
+  top: 50px;
+  grid-template-rows: repeat(3, auto) 1fr;
   background-color: #edf2f4;
   width: clamp(150px, 20vw, 300px);
   padding: 10px;
@@ -41,7 +45,8 @@ body {
 
 .slideable {
   width: 0;
-  padding: 0;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .slideable * {
@@ -51,6 +56,7 @@ body {
 .projects-tab {
   position: relative;
   z-index: 0;
+  flex: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -132,6 +138,16 @@ body {
   padding: 10px 0;
 }
 
+.project-creator-container {
+  align-self: flex-end;
+  background-color: #d7dcde;
+  margin-bottom: 50px;
+  width: 100%;
+  height: 35px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
 .sidebar-panel-container {
   display: flex;
 }
@@ -139,8 +155,9 @@ body {
 .panel-container {
   width: 100%;
   height: 100%;
-  padding: 20px;
-  padding-left: 60px;
+  padding: 20px 60px;
+  margin-left: clamp(150px, 20vw, 300px);
+  margin-top: 50px;
 }
 
 .panel-container > * {

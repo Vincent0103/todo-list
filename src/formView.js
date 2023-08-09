@@ -1,6 +1,7 @@
 import CloseIcon from "./assets/close-thick.svg";
 import CheckIcon from "./assets/check-bold.svg";
 import { addTodoContainer } from "./todoView";
+import { getCurrentProjectId } from "./todoView";
 import { todoLogicModule } from "./todoView";
 
 const formPanel = (() => {
@@ -274,6 +275,8 @@ const formPanelLogic = (() => {
         const desc = inputContainers[2].value;
         const priorityColor = priorityInput.getAttribute("value");
         const formTodoObj = todoLogicModule.objects.addTodoObj(title, desc, date, priorityColor);
+        todoLogicModule.objects.addProjectTodoList(getCurrentProjectId(), formTodoObj);
+        console.log(todoLogicModule.objects.getProjectsTodoListObj());
         addTodoContainer(formTodoObj);
         formPanel.addSuccessMessage(panelFormContainer);
       }

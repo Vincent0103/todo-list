@@ -1,34 +1,40 @@
-import { set } from "lodash";
 import MenuDown from "./assets/menu-down.svg";
 import PlusIcon from "./assets/plus-circle-outline.svg";
 import formPanel from "./formView";
 
+window.addEventListener("DOMContentLoaded", () => {
+  panel.todo.addTodoTemplateContent();
+})
+
 const panel = (() => {
-  let currentProjectId = false;
-  let idIncrementor = 0;
+  let currentProjectId;
+  let idIncrementor;
   let panelContainer;
 
-  function addContent(projectId=0) {
-    currentProjectId = projectId;
+  function addContent(projectName, projectId) {
+    currentProjectId = Number.parseInt(projectId);
+    idIncrementor = 0;
     return getProperPanelDisplay();
 
     function getProperPanelDisplay() {
       panelContainer = document.createElement("div");
       panelContainer.classList.add("panel-container");
 
-      if (currentProjectId === 0) {
-        const h1 = document.createElement("h1");
-        h1.textContent = "Inbox";
+      const h1 = document.createElement("h1");
+      h1.textContent = projectName;
 
-        const hr = document.createElement("hr");
+      const hr = document.createElement("hr");
 
-        panelContainer.append(h1, hr);
-        todo.addTodoContent(panelContainer, currentProjectId);
-      }
+      panelContainer.append(h1, hr);
+      todo.addTodoContent(panelContainer, currentProjectId);
 
 
       return panelContainer;
     }
+  }
+
+  function getCurrentProjectId() {
+    return currentProjectId;
   }
 
   function getIdIncrementor() {
@@ -37,14 +43,16 @@ const panel = (() => {
 
   const todo = (() => {
     function addTodoContent(panelContainer, projectId) {
-      addTodoTemplateContent();
+      console.log("adding");
 
       let inboxProjectTodos = todoLogic.objects.getProjectsTodoListObj()[projectId];
       panelContainer.appendChild(addTodoFormBtnLink());
 
-      inboxProjectTodos.forEach(todo => {
-        addTodoContainer(todo);
-      })
+      if (typeof inboxProjectTodos === "object") {
+        inboxProjectTodos.forEach(todo => {
+          addTodoContainer(todo);
+        })
+      }
     }
 
     function changeTodoContainerStyle(todoContainer, color) {
@@ -100,7 +108,7 @@ const panel = (() => {
 
     function removeTodoContainer(todoContainer) {
       const todoObjId = todoContainer.getAttribute("data-id");
-      todoLogic.objects.removeTodoObj(todoObjId);
+      todoLogic.objects.removeTodoObj(todoObjId, currentProjectId);
       handleTodoContainerRemoveAnimation();
 
       function handleTodoContainerRemoveAnimation() {
@@ -156,10 +164,42 @@ const panel = (() => {
       todoLogic.objects.addProjectTodoList(0, currentTodoObj);
 
       currentTodoObj = todoLogic.objects.addTodoObj(
+        "Spectrum Serenade: Echoes of Imagination",
+        "Embark on a vivid journey through diverse realms of creativity in Spectrum Serenade.",
+        "2043-07-25T03:43",
+        "red");
+
+      todoLogic.objects.addProjectTodoList(1, currentTodoObj);
+
+      currentTodoObj = todoLogic.objects.addTodoObj(
+        "Whispering Shadows: Secrets Unveiled",
+        "");
+
+      todoLogic.objects.addProjectTodoList(1, currentTodoObj);
+
+      currentTodoObj = todoLogic.objects.addTodoObj(
+        "Spectrum Serenade: Echoes of Imagination",
+        "Embark on a vivid journey through diverse realms of creativity in Spectrum Serenade.",
+        "2043-07-25T03:43",
+        "red");
+
+      todoLogic.objects.addProjectTodoList(2, currentTodoObj);
+
+      currentTodoObj = todoLogic.objects.addTodoObj(
+        "TaskTrek: Navigating Your Day's Endeavors",
+        "Effortlessly manage tasks, boost productivity, and achieve more with TaskTrek.",
+        "2028-11-23T18:21",
+        "blue");
+
+      todoLogic.objects.addProjectTodoList(2, currentTodoObj);
+
+      currentTodoObj = todoLogic.objects.addTodoObj(
         "Whispering Shadows: Secrets Unveiled",
         "");
 
       todoLogic.objects.addProjectTodoList(0, currentTodoObj);
+
+      console.log(todoLogic.objects.getProjectsTodoListObj());
     }
 
     function getPanelContainer() {
@@ -187,10 +227,10 @@ const panel = (() => {
       }
     }
 
-    return {addTodoContent, removeTodoContainer, addTodoContainer, containsDesc, handleExpandableClass};
+    return {addTodoContent, addTodoTemplateContent, removeTodoContainer, addTodoContainer, containsDesc, handleExpandableClass};
   })()
 
-  return {addContent, getIdIncrementor, todo};
+  return {addContent, getIdIncrementor, getCurrentProjectId, todo};
 })();
 
 const todoLogic = (() => {
@@ -237,7 +277,7 @@ const todoLogic = (() => {
       if (!(projectId in projectsTodoListObj)) {
         projectsTodoListObj[projectId] = [todoObj];
       } else {
-        projectsTodoListObj[projectId].unshift(todoObj);
+        projectsTodoListObj[projectId].push(todoObj);
       }
     }
 
@@ -258,8 +298,8 @@ const todoLogic = (() => {
       return {title, desc, dueDate, priority, isDone, toStr};
     }
 
-    function removeTodoObj(todoObjId) {
-      getProjectsTodoListObj()[0].splice(todoObjId, 1);
+    function removeTodoObj(todoObjId, projectId) {
+      getProjectsTodoListObj()[projectId].splice(todoObjId, 1);
     }
 
     return {getProjectsTodoListObj, getPriorityStyling, addProjectTodoList, addTodoObj, removeTodoObj};
@@ -340,4 +380,5 @@ const todoLogic = (() => {
 
 export default panel;
 export const addTodoContainer = panel.todo.addTodoContainer;
+export const getCurrentProjectId = panel.getCurrentProjectId;
 export const todoLogicModule = todoLogic;
