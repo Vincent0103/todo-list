@@ -46,8 +46,7 @@ const panel = (() => {
         title.textContent = todoData.title;
 
         const dueDate = document.createElement("p");
-        dueDate.textContent = todoData.dueDate;
-
+        dueDate.textContent = todoLogic.convertDate(todoData.dueDate);
         todoContainer.append(checkMarkContainer, title, dueDate);
         todoContainer.innerHTML += MenuDown;
 
@@ -81,21 +80,21 @@ const panel = (() => {
       let currentTodoObj = todoLogic.objects.addTodoObj(
         "Master Plan of Achievements: Today's Tasks",
         "Stay organized and on top of your tasks with this comprehensive to-do list. Whether you're tackling work assignments.",
-        "18/09/24");
+        "2023-09-24T12:17");
 
       todoLogic.objects.addProjectTodoList(0, currentTodoObj);
 
       currentTodoObj = todoLogic.objects.addTodoObj(
         "TaskTrek: Navigating Your Day's Endeavors",
         "Effortlessly manage tasks, boost productivity, and achieve more with TaskTrek.",
-        "28/11/23");
+        "2028-11-23T18:21");
 
       todoLogic.objects.addProjectTodoList(0, currentTodoObj);
 
       currentTodoObj = todoLogic.objects.addTodoObj(
         "Spectrum Serenade: Echoes of Imagination",
         "Embark on a vivid journey through diverse realms of creativity in Spectrum Serenade.",
-        "13/07/25");
+        "2043-07-25T03:43");
 
       todoLogic.objects.addProjectTodoList(0, currentTodoObj);
 
@@ -131,11 +130,11 @@ const todoLogic = (() => {
 
     function addTodoObj(title, desc="", dueDate=null, priority=0, isDone=false) {
       if (desc.length >= 160) {
-        throw new Error("Description is longer than 160 characters!");
+        throw new Error(`Description is longer than 160 characters! \n${desc}`);
       } else if (title.length <= 3 || title.length >= 60) {
-        throw new Error("title is less than 3 characters or longer than 60 characters!");
+        throw new Error(`title is less than 3 characters or longer than 60 characters! \n${title}`);
       } else if (dueDate !== null && !matchValidDate(dueDate)) {
-        throw new Error("Invalid date format!");
+        throw new Error(`Invalid date format! \n${dueDate}`);
       }
 
       const toStr = () => {
@@ -199,11 +198,19 @@ const todoLogic = (() => {
   })();
 
   function matchValidDate(str) {
-    return (str.match(/^(?:[0][1-9]|[1-2][0-9]|[3][0-1])\/(?:[0][1-9]|[1][0-2])\/(?:[2][3-9]|[3-9][0-9])$/gm))
+    return (str.match(/^[2][0](?:[2][3-9]|[3-9][0-9])-(?:[0][1-9]|[1][0-2])-(?:[0][1-9]|[1-2][0-9]|[3][0-1])T(?:[0-1][[0-9]|[2][0-3]):(?:[0-5][0-9])$/gm))
     ? true : false;
   }
 
-  return {objects, listeners};
+  function convertDate(str) {
+    return (str === null)
+    ? ""
+    : str.substring(0, str.indexOf("T"))
+     + " at " +
+     str.substring(str.indexOf("T") + 1, str.length);
+  }
+
+  return {objects, listeners, convertDate};
 })();
 
 export default panel;

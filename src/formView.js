@@ -31,6 +31,10 @@ const formPanel = (() => {
 
     function addFormInputPanel() {
       const form = document.createElement("form");
+
+      // prevents from page reload on form submit
+      form.setAttribute("action", "javascript:void(0);");
+
       form.classList.add("form-input-container");
       form.append(addTitleInput(), addDueDate(), addDescInput(), addPriorityDiv(), addAddBtn());
 
@@ -38,6 +42,7 @@ const formPanel = (() => {
         const titleInput = document.createElement("input");
         titleInput.classList.add("input-container");
         titleInput.classList.add("title-input");
+        titleInput.required = true;
         titleInput.minLength = 3;
         titleInput.maxLength = 60;
         titleInput.placeholder = "Title*";
@@ -50,6 +55,12 @@ const formPanel = (() => {
         dateInput.classList.add("input-container");
         dateInput.classList.add("date-input");
         dateInput.type = "datetime-local";
+        dateInput.min = getCurrentDatetimeLocal();
+
+        function getCurrentDatetimeLocal() {
+          const currentDatetimeLocal = new Date().toISOString().slice(0, new Date().toISOString().lastIndexOf(":"));
+          return currentDatetimeLocal;
+        }
 
         return dateInput;
       }
@@ -80,6 +91,7 @@ const formPanel = (() => {
           const prioritySelect = document.createElement("div");
           prioritySelect.classList.add("input-container");
           prioritySelect.setAttribute("id", "priority-input");
+          prioritySelect.setAttribute("value", "gray");
           formPanelLogic.listenPriorityInput(prioritySelect);
 
           return prioritySelect;
@@ -228,8 +240,6 @@ const formPanelLogic = (() => {
       })
     })
 
-
-
     function listenColorOptions() {
       const colorOptions = colorOptionsContainer.querySelectorAll(".color-options");
 
@@ -246,9 +256,29 @@ const formPanelLogic = (() => {
 
   function listenAddBtn(addBtn, panelFormContainer) {
     addBtn.addEventListener("click", e => {
-      e.preventDefault();
-      formPanel.addSuccessMessage(panelFormContainer);
+
+      // seperating priority input because it is a custom input type and is a div
+      const inputContainers = panelFormContainer.querySelectorAll(".form-input-container .input-container:not(#priority-input)");
+      const priorityInput = panelFormContainer.querySelector("#priority-input");
+      let areValidInputs = checkFormValidity(inputContainers);
+
+      if (areValidInputs) {
+        inputContainers.forEach(input => {
+          console.log(input.value);
+          console.log(priorityInput.getAttribute("value"));
+        });
+        // formPanel.addSuccessMessage(panelFormContainer);
+      }
     });
+
+    function checkFormValidity(inputContainers) {
+      for (let input of inputContainers) {
+        if (!input.checkValidity()) {
+          return false;
+        }
+      }
+      return true;
+    }
   }
 
   return {listenCloseBtn, listenPriorityInput, listenAddBtn};
