@@ -170,12 +170,13 @@ body {
   grid-row: 1 / 3;
   border-radius: 50%;
   border: 2px solid #696969;
-  background-color: #fafafa;
+  background-color: rgb(235, 235, 235);
   cursor: pointer;
+  transition: background-color .1s;
 }
 
 .todo-container > .check-mark-container:hover {
-  background-color: #e9e9e9;
+  background-color: rgb(217, 217, 217);
 }
 
 .todo-container > svg {

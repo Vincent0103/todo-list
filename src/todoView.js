@@ -34,15 +34,31 @@ const panel = (() => {
       addTodoTemplateContent();
 
       let inboxProjectTodos = todoLogic.objects.getProjectsTodoListObj()[projectId];
+      console.log(inboxProjectTodos);
       panelContainer.appendChild(addTodoFormBtnLink());
-      console.log(todoLogic.objects.getProjectsTodoListObj());
 
       inboxProjectTodos.forEach(todo => {
-        addTodoContainer(todo, projectId)
+        addTodoContainer(todo)
       })
     }
 
-    function addTodoContainer(currentTodoObj) {
+    function changeTodoContainerStyle(todoContainer, color) {
+      const checkMarkContainer = todoContainer.querySelector(".check-mark-container");
+      const currentStylingBundle = todoLogic.objects.getPriorityStyling(color);
+
+      checkMarkContainer.style.backgroundColor = currentStylingBundle.bgc;
+      todoContainer.style.borderColor = currentStylingBundle.borderContainerColor;
+      checkMarkContainer.style.borderColor = currentStylingBundle.borderColor;
+
+      checkMarkContainer.addEventListener("mouseenter", () => {
+        checkMarkContainer.style.backgroundColor = currentStylingBundle.hoverBgc;
+      })
+      checkMarkContainer.addEventListener("mouseleave", () => {
+        checkMarkContainer.style.backgroundColor = currentStylingBundle.bgc;
+      })
+    }
+
+    function addTodoContainer(currentTodoObj, priorityColor="gray") {
       const panelContainer = getPanelContainer();
 
       const todoContainer = document.createElement("div");
@@ -50,7 +66,6 @@ const panel = (() => {
 
       const checkMarkContainer = document.createElement("div");
       checkMarkContainer.classList.add("check-mark-container");
-      todoContainer.style.borderColor = currentTodoObj.priority;
 
       const title = document.createElement("p");
       title.textContent = currentTodoObj.title;
@@ -66,6 +81,8 @@ const panel = (() => {
       todoContainer.appendChild(desc);
       todoLogic.listeners.listenTodoContainer(todoContainer, desc);
       insertBeforeDiv();
+
+      changeTodoContainerStyle(todoContainer, priorityColor);
 
       function insertBeforeDiv() {
         const insertBeforeDiv = panelContainer.querySelector(".todo-container:nth-child(4)");
@@ -114,7 +131,7 @@ const panel = (() => {
 
       currentTodoObj = todoLogic.objects.addTodoObj(
         "Whispering Shadows: Secrets Unveiled",
-        "Delve into a gripping tale of intrigue and discovery as Whispering Shadows reveals hidden truths.");
+        "");
 
       todoLogic.objects.addProjectTodoList(0, currentTodoObj);
     }
@@ -123,7 +140,16 @@ const panel = (() => {
       return panelContainer;
     }
 
-    return {addTodoContent, addTodoContainer};
+    function containsDesc(todoContainer, desc) {
+      if (desc.textContent.length <= 0) {
+        todoContainer.removeChild(todoContainer.querySelector("svg"));
+        todoContainer.style.cursor = "default";
+        return false;
+      }
+      return true;
+    }
+
+    return {addTodoContent, addTodoContainer, containsDesc};
   })()
 
   return {addContent, todo};
@@ -135,6 +161,37 @@ const todoLogic = (() => {
   const objects = (() => {
     function getProjectsTodoListObj() {
       return projectsTodoListObj;
+    }
+
+    function getPriorityStyling(forColor) {
+      let borderColor;
+      let bgc;
+      let hoverBgc;
+      let borderContainerColor;
+
+      if (forColor === "red") {
+        borderColor = "#ef233c";
+        borderContainerColor = "#ff9aa7";
+        bgc = "#f6dad8";
+        hoverBgc = "#f7c1be";
+      } else if (forColor === "orange") {
+        borderColor = "#ed9f11";
+        borderContainerColor = "#ffcb6d";
+        bgc = "#fff1de";
+        hoverBgc = "#ffdfb5";
+      } else if (forColor === "blue") {
+        borderColor = "#2079ff";
+        borderContainerColor = "#afafff";
+        bgc = "#e1edff";
+        hoverBgc = "#bbd6ff";
+      } else if (forColor === "gray") {
+        borderColor = "#696969";
+        borderContainerColor = "#c8c8c8";
+        bgc = "#ebebeb";
+        hoverBgc = "#d9d9d9";
+      }
+
+      return {borderColor, bgc, hoverBgc, borderContainerColor};
     }
 
     function addProjectTodoList(projectId, todoObj) {
@@ -149,7 +206,7 @@ const todoLogic = (() => {
     function addTodoObj(title, desc="", dueDate="", priority="gray", isDone=false) {
       if (desc.length >= 160) {
         throw new Error(`Description is longer than 160 characters! \n${desc}`);
-      } else if (title.length <= 3 || title.length >= 60) {
+      } else if (title.length < 3 || title.length >= 60) {
         throw new Error(`title is less than 3 characters or longer than 60 characters! \n${title}`);
       } else if (dueDate !== "" && !matchValidDate(dueDate)) {
         throw new Error(`Invalid date format! \n${dueDate}`);
@@ -159,50 +216,53 @@ const todoLogic = (() => {
         return `Current todo: \"${title}\", desc: \"${desc}\", due in ${dueDate} of priority ${priority}`;
       }
 
+
       return {title, desc, dueDate, priority, isDone, toStr};
     }
 
-    return {getProjectsTodoListObj, addProjectTodoList, addTodoObj};
+    return {getProjectsTodoListObj, getPriorityStyling, addProjectTodoList, addTodoObj};
   })();
 
   const listeners = (() => {
     function listenTodoContainer(todoContainer, todoDesc) {
-      todoContainer.addEventListener("click", () => {
-        if (!todoContainer.classList.contains("expandable")) {
-          todoContainer.classList.add("expandable");
-          listenTodoDesc(todoContainer, todoDesc);
-        } else {
-          todoContainer.classList.remove("expandable");
+      if (panel.todo.containsDesc(todoContainer, todoDesc)) {
+        todoContainer.addEventListener("click", () => {
+          if (!todoContainer.classList.contains("expandable")) {
+            todoContainer.classList.add("expandable");
+            listenTodoDesc(todoContainer, todoDesc);
+          } else {
+            todoContainer.classList.remove("expandable");
 
-          // removes inline styling from js
-          todoContainer.style.gridTemplateRows = null;
-        }
-      });
+            // removes inline styling from js
+            todoContainer.style.gridTemplateRows = null;
+          }
 
-      function listenTodoDesc(todoContainer, todoDesc) {
-        let descHeight;
+          function listenTodoDesc(todoContainer, todoDesc) {
+            let descHeight;
 
-        // create an Observer instance
-        const resizeObserver = new ResizeObserver(entries => {
-          console.log('Body height changed:', entries[0].target.clientHeight);
-          descHeight = entries[0].target.clientHeight;
+            // create an Observer instance
+            const resizeObserver = new ResizeObserver(entries => {
+              console.log('Body height changed:', entries[0].target.clientHeight);
+              descHeight = entries[0].target.clientHeight;
 
-          changeGridTemplateRowHeight();
-        });
+              changeGridTemplateRowHeight();
+            });
 
-        // start observing a DOM node
-        resizeObserver.observe(todoDesc);
+            // start observing a DOM node
+            resizeObserver.observe(todoDesc);
 
-        // makes it so the todoDesc content doesn't overflow in a manner of dynamicity
-        function changeGridTemplateRowHeight() {
-          if (todoContainer.classList.contains("expandable")) {
-            if (descHeight <= 116) {
-              todoContainer.style.gridTemplateRows = `auto ${descHeight + 20}px`;
-            } else {
-              todoContainer.style.gridTemplateRows = `auto ${136}px`;
+            // makes it so the todoDesc content doesn't overflow in a manner of dynamicity
+            function changeGridTemplateRowHeight() {
+              if (todoContainer.classList.contains("expandable")) {
+                if (descHeight <= 116) {
+                  todoContainer.style.gridTemplateRows = `auto ${descHeight + 20}px`;
+                } else {
+                  todoContainer.style.gridTemplateRows = `auto ${136}px`;
+                }
+              }
             }
           }
-        }
+        });
       }
     }
 

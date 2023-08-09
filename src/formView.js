@@ -94,6 +94,9 @@ const formPanel = (() => {
           prioritySelect.classList.add("input-container");
           prioritySelect.setAttribute("id", "priority-input");
           prioritySelect.setAttribute("value", "gray");
+
+          // used later for todo container border-color
+          prioritySelect.style.borderColor = "rgb(92, 92, 92)";
           formPanelLogic.listenPriorityInput(prioritySelect);
 
           return prioritySelect;
@@ -269,10 +272,9 @@ const formPanelLogic = (() => {
         const title = inputContainers[0].value;
         const date = inputContainers[1].value;
         const desc = inputContainers[2].value;
-        const priority = priorityInput.getAttribute("value");
-        console.log(priority);
-        const formTodoObj = todoLogicModule.objects.addTodoObj(title, desc, date, priority);
-        addTodoContainer(formTodoObj, 0);
+        const priorityColor = priorityInput.getAttribute("value");
+        const formTodoObj = todoLogicModule.objects.addTodoObj(title, desc, date, priorityColor);
+        addTodoContainer(formTodoObj, priorityColor);
         formPanel.addSuccessMessage(panelFormContainer);
       }
     });
