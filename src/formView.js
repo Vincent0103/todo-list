@@ -274,7 +274,7 @@ const formPanelLogic = (() => {
         const desc = inputContainers[2].value;
         const priorityColor = priorityInput.getAttribute("value");
         const formTodoObj = todoLogicModule.objects.addTodoObj(title, desc, date, priorityColor);
-        addTodoContainer(formTodoObj, priorityColor);
+        addTodoContainer(formTodoObj);
         formPanel.addSuccessMessage(panelFormContainer);
       }
     });

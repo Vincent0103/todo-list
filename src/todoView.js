@@ -1,9 +1,11 @@
+import { set } from "lodash";
 import MenuDown from "./assets/menu-down.svg";
 import PlusIcon from "./assets/plus-circle-outline.svg";
 import formPanel from "./formView";
 
 const panel = (() => {
   let currentProjectId = false;
+  let idIncrementor = 0;
   let panelContainer;
 
   function addContent(projectId=0) {
@@ -29,16 +31,19 @@ const panel = (() => {
     }
   }
 
+  function getIdIncrementor() {
+    return idIncrementor;
+  }
+
   const todo = (() => {
     function addTodoContent(panelContainer, projectId) {
       addTodoTemplateContent();
 
       let inboxProjectTodos = todoLogic.objects.getProjectsTodoListObj()[projectId];
-      console.log(inboxProjectTodos);
       panelContainer.appendChild(addTodoFormBtnLink());
 
       inboxProjectTodos.forEach(todo => {
-        addTodoContainer(todo)
+        addTodoContainer(todo);
       })
     }
 
@@ -58,11 +63,12 @@ const panel = (() => {
       })
     }
 
-    function addTodoContainer(currentTodoObj, priorityColor="gray") {
+    function addTodoContainer(currentTodoObj) {
       const panelContainer = getPanelContainer();
 
       const todoContainer = document.createElement("div");
       todoContainer.classList.add("todo-container");
+      todoContainer.setAttribute("data-id", idIncrementor);
 
       const checkMarkContainer = document.createElement("div");
       checkMarkContainer.classList.add("check-mark-container");
@@ -82,13 +88,30 @@ const panel = (() => {
       todoLogic.listeners.listenTodoContainer(todoContainer, desc);
       insertBeforeDiv();
 
-      changeTodoContainerStyle(todoContainer, priorityColor);
+      changeTodoContainerStyle(todoContainer, currentTodoObj.priority);
+      idIncrementor++;
 
       function insertBeforeDiv() {
         const insertBeforeDiv = panelContainer.querySelector(".todo-container:nth-child(4)");
         panelContainer.insertBefore(todoContainer, insertBeforeDiv);
       }
 
+    }
+
+    function removeTodoContainer(todoContainer) {
+      const todoObjId = todoContainer.getAttribute("data-id");
+      todoLogic.objects.removeTodoObj(todoObjId);
+      handleTodoContainerRemoveAnimation();
+
+      function handleTodoContainerRemoveAnimation() {
+        if (todoContainer.classList.contains("expandable")) {
+          todoContainer.classList.remove("expandable");
+          todoContainer.style.gridTemplateRows = `auto 0px`;
+        }
+        todoContainer.style.zIndex = "-1";
+        formPanel.addAnimation(todoContainer, "slideUp", .5);
+        setTimeout(() => todoContainer.remove(), 480);
+      }
     }
 
     function addTodoFormBtnLink() {
@@ -111,21 +134,24 @@ const panel = (() => {
       let currentTodoObj = todoLogic.objects.addTodoObj(
         "Master Plan of Achievements: Today's Tasks",
         "Stay organized and on top of your tasks with this comprehensive to-do list. Whether you're tackling work assignments.",
-        "2023-09-24T12:17");
+        "2023-09-24T12:17",
+        "orange");
 
       todoLogic.objects.addProjectTodoList(0, currentTodoObj);
 
       currentTodoObj = todoLogic.objects.addTodoObj(
         "TaskTrek: Navigating Your Day's Endeavors",
         "Effortlessly manage tasks, boost productivity, and achieve more with TaskTrek.",
-        "2028-11-23T18:21");
+        "2028-11-23T18:21",
+        "blue");
 
       todoLogic.objects.addProjectTodoList(0, currentTodoObj);
 
       currentTodoObj = todoLogic.objects.addTodoObj(
         "Spectrum Serenade: Echoes of Imagination",
         "Embark on a vivid journey through diverse realms of creativity in Spectrum Serenade.",
-        "2043-07-25T03:43");
+        "2043-07-25T03:43",
+        "red");
 
       todoLogic.objects.addProjectTodoList(0, currentTodoObj);
 
@@ -149,10 +175,22 @@ const panel = (() => {
       return true;
     }
 
-    return {addTodoContent, addTodoContainer, containsDesc};
+    function handleExpandableClass(todoContainer, todoDesc) {
+      if (!todoContainer.classList.contains("expandable")) {
+        todoContainer.classList.add("expandable");
+        todoLogic.listeners.listenTodoDesc(todoContainer, todoDesc);
+      } else {
+        todoContainer.classList.remove("expandable");
+
+        // removes inline styling from js
+        todoContainer.style.gridTemplateRows = null;
+      }
+    }
+
+    return {addTodoContent, removeTodoContainer, addTodoContainer, containsDesc, handleExpandableClass};
   })()
 
-  return {addContent, todo};
+  return {addContent, getIdIncrementor, todo};
 })();
 
 const todoLogic = (() => {
@@ -220,49 +258,34 @@ const todoLogic = (() => {
       return {title, desc, dueDate, priority, isDone, toStr};
     }
 
-    return {getProjectsTodoListObj, getPriorityStyling, addProjectTodoList, addTodoObj};
+    function removeTodoObj(todoObjId) {
+      getProjectsTodoListObj()[0].splice(todoObjId, 1);
+    }
+
+    return {getProjectsTodoListObj, getPriorityStyling, addProjectTodoList, addTodoObj, removeTodoObj};
   })();
 
   const listeners = (() => {
     function listenTodoContainer(todoContainer, todoDesc) {
       if (panel.todo.containsDesc(todoContainer, todoDesc)) {
-        todoContainer.addEventListener("click", () => {
-          if (!todoContainer.classList.contains("expandable")) {
-            todoContainer.classList.add("expandable");
-            listenTodoDesc(todoContainer, todoDesc);
+        todoContainer.addEventListener("click", e => {
+          if (e.target.className === "check-mark-container") {
+            listenCheckMarkContainer(e.target.parentElement);
           } else {
-            todoContainer.classList.remove("expandable");
-
-            // removes inline styling from js
-            todoContainer.style.gridTemplateRows = null;
+            panel.todo.handleExpandableClass(todoContainer, todoDesc);
           }
 
-          function listenTodoDesc(todoContainer, todoDesc) {
-            let descHeight;
-
-            // create an Observer instance
-            const resizeObserver = new ResizeObserver(entries => {
-              console.log('Body height changed:', entries[0].target.clientHeight);
-              descHeight = entries[0].target.clientHeight;
-
-              changeGridTemplateRowHeight();
-            });
-
-            // start observing a DOM node
-            resizeObserver.observe(todoDesc);
-
-            // makes it so the todoDesc content doesn't overflow in a manner of dynamicity
-            function changeGridTemplateRowHeight() {
-              if (todoContainer.classList.contains("expandable")) {
-                if (descHeight <= 116) {
-                  todoContainer.style.gridTemplateRows = `auto ${descHeight + 20}px`;
-                } else {
-                  todoContainer.style.gridTemplateRows = `auto ${136}px`;
-                }
-              }
-            }
+        });
+      } else {
+        todoContainer.addEventListener("click", e => {
+          if (e.target.className === "check-mark-container") {
+            listenCheckMarkContainer(e.target.parentElement);
           }
         });
+      }
+
+      function listenCheckMarkContainer(todoContainer) {
+        panel.todo.removeTodoContainer(todoContainer);
       }
     }
 
@@ -272,7 +295,31 @@ const todoLogic = (() => {
       })
     }
 
-    return {listenTodoContainer, listenTodoBtnFormContainer};
+    function listenTodoDesc(todoContainer, todoDesc) {
+      let descHeight;
+
+      // create an Observer instance
+      const resizeObserver = new ResizeObserver(entries => {
+        console.log('Body height changed:', entries[0].target.clientHeight);
+        descHeight = entries[0].target.clientHeight;
+
+        changeGridTemplateRowHeight();
+      });
+
+      // start observing a DOM node
+      resizeObserver.observe(todoDesc);
+
+      // makes it so the todoDesc content doesn't overflow in a manner of dynamicity
+      function changeGridTemplateRowHeight() {
+        if (descHeight <= 116) {
+          todoContainer.style.gridTemplateRows = `auto ${descHeight + 20}px`;
+        } else {
+          todoContainer.style.gridTemplateRows = `auto ${136}px`;
+        }
+      }
+    }
+
+    return {listenTodoContainer, listenTodoBtnFormContainer, listenTodoDesc};
   })();
 
   function matchValidDate(str) {
