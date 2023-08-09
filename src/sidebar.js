@@ -1,5 +1,6 @@
 import InboxIcon from "./assets/inbox.svg";
 import MenuDown from "./assets/menu-down.svg";
+import AddProjectIcon from "./assets/plus-box-multiple-outline.svg"
 import todoPanel from "./todoView";
 import addPage from "./pageload";
 
@@ -108,6 +109,12 @@ const project = (() => {
     const projectCreatorContainer = document.createElement("div");
     projectCreatorContainer.classList.add("project-creator-container");
 
+    projectCreatorContainer.innerHTML = AddProjectIcon;
+
+    const p = document.createElement("p");
+    p.textContent = "Add Project";
+
+    projectCreatorContainer.appendChild(p);
     return projectCreatorContainer;
   }
 

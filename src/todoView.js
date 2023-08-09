@@ -43,7 +43,6 @@ const panel = (() => {
 
   const todo = (() => {
     function addTodoContent(panelContainer, projectId) {
-      console.log("adding");
 
       let inboxProjectTodos = todoLogic.objects.getProjectsTodoListObj()[projectId];
       panelContainer.appendChild(addTodoFormBtnLink());
@@ -198,8 +197,6 @@ const panel = (() => {
         "");
 
       todoLogic.objects.addProjectTodoList(0, currentTodoObj);
-
-      console.log(todoLogic.objects.getProjectsTodoListObj());
     }
 
     function getPanelContainer() {
@@ -337,13 +334,15 @@ const todoLogic = (() => {
 
     function listenTodoDesc(todoContainer, todoDesc) {
       let descHeight;
+      let hasExecutedOnce = false;
 
       // create an Observer instance
       const resizeObserver = new ResizeObserver(entries => {
-        console.log('Body height changed:', entries[0].target.clientHeight);
         descHeight = entries[0].target.clientHeight;
 
-        changeGridTemplateRowHeight();
+        if (!hasExecutedOnce) {
+          changeGridTemplateRowHeight();
+        }
       });
 
       // start observing a DOM node
@@ -351,6 +350,8 @@ const todoLogic = (() => {
 
       // makes it so the todoDesc content doesn't overflow in a manner of dynamicity
       function changeGridTemplateRowHeight() {
+        console.log("doing");
+        hasExecutedOnce = true;
         if (descHeight <= 116) {
           todoContainer.style.gridTemplateRows = `auto ${descHeight + 20}px`;
         } else {

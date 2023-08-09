@@ -262,23 +262,27 @@ const formPanelLogic = (() => {
 
 
   function listenAddBtn(addBtn, panelFormContainer) {
+    let hasClicked = false;
     addBtn.addEventListener("click", e => {
+      if (!hasClicked) {
+        // seperating priority input because it is a custom input type and is a div
+        const inputContainers = panelFormContainer.querySelectorAll(".form-input-container .input-container:not(#priority-input)");
+        const priorityInput = panelFormContainer.querySelector("#priority-input");
+        let areValidInputs = checkFormValidity(inputContainers);
 
-      // seperating priority input because it is a custom input type and is a div
-      const inputContainers = panelFormContainer.querySelectorAll(".form-input-container .input-container:not(#priority-input)");
-      const priorityInput = panelFormContainer.querySelector("#priority-input");
-      let areValidInputs = checkFormValidity(inputContainers);
+        if (areValidInputs) {
+          const title = inputContainers[0].value;
+          const date = inputContainers[1].value;
+          const desc = inputContainers[2].value;
+          const priorityColor = priorityInput.getAttribute("value");
+          const formTodoObj = todoLogicModule.objects.addTodoObj(title, desc, date, priorityColor);
+          todoLogicModule.objects.addProjectTodoList(getCurrentProjectId(), formTodoObj);
+          console.log(todoLogicModule.objects.getProjectsTodoListObj());
+          addTodoContainer(formTodoObj);
+          formPanel.addSuccessMessage(panelFormContainer);
+        }
 
-      if (areValidInputs) {
-        const title = inputContainers[0].value;
-        const date = inputContainers[1].value;
-        const desc = inputContainers[2].value;
-        const priorityColor = priorityInput.getAttribute("value");
-        const formTodoObj = todoLogicModule.objects.addTodoObj(title, desc, date, priorityColor);
-        todoLogicModule.objects.addProjectTodoList(getCurrentProjectId(), formTodoObj);
-        console.log(todoLogicModule.objects.getProjectsTodoListObj());
-        addTodoContainer(formTodoObj);
-        formPanel.addSuccessMessage(panelFormContainer);
+        hasClicked = true;
       }
     });
 

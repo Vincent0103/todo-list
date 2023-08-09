@@ -68,6 +68,7 @@ body {
 }
 
 .projects-tab > p {
+  font-weight: bold;
   margin: 10px;
 }
 
@@ -139,6 +140,11 @@ body {
 }
 
 .project-creator-container {
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
   align-self: flex-end;
   background-color: #d7dcde;
   margin-bottom: 50px;
@@ -146,6 +152,15 @@ body {
   height: 35px;
   border-radius: 7px;
   cursor: pointer;
+  transition: box-shadow .2s;
+}
+
+.project-creator-container:hover {
+  box-shadow: 0 0 5px rgba(0, 0, 0, .05);
+}
+
+.project-creator-container > svg {
+  height: 20px;
 }
 
 .sidebar-panel-container {
