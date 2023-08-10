@@ -4,7 +4,7 @@ import AddProjectIcon from "./assets/plus-box-multiple-outline.svg"
 import todoPanel from "./todoView";
 import { todoLogicModule } from "./todoView";
 import addPage from "./pageload";
-import { first } from "lodash";
+import { addAnimation } from "./formView";
 
 let sidebarContainer;
 let menuSvg;
@@ -135,12 +135,12 @@ const project = (() => {
 
   function addProjectCreatorTab() {
     if (typeof projectCreatorContainer !== "undefined") {
-      console.log(typeof projectCreatorContainer);
       projectCreatorContainer.innerHTML = "";
+      projectCreatorContainer.classList.remove("inputting");
+      console.log(projectCreatorContainer.classList);
     } else {
       projectCreatorContainer = document.createElement("div");
       projectCreatorContainer.classList.add("project-creator-container");
-
     }
 
     projectCreatorContainer.innerHTML = AddProjectIcon;
@@ -149,25 +149,32 @@ const project = (() => {
     p.textContent = "Add Project";
 
     projectCreatorContainer.appendChild(p);
-
     sidebarHandler.listenProjectCreatorContainer();
+    for (const child of projectCreatorContainer.children) {
+      addAnimation(child, "fadeIn", .1);
+    }
+
     return projectCreatorContainer;
   }
 
   function addProjectCreatorInput() {
     projectCreatorContainer.innerHTML = "";
-    console.log(projectCreatorContainer.classList);
     projectCreatorContainer.classList.add("inputting");
 
     const input = document.createElement("input");
     input.classList.add("project-input-container");
     input.placeholder = "Project Name";
+    input.maxLength = 20;
+    addAnimation(input, "fadeIn", .1);
+
     const div = document.createElement("div");
     const svg = AddProjectIcon;
     div.innerHTML = svg;
+    addAnimation(div, "fadeIn", .1);
 
     projectCreatorContainer.append(input, div);
     sidebarHandler.listenAddProjectCreatorBtn(div, input);
+    sidebarHandler.listenWindow();
   }
 
   return {addProjectsTab, addProjects, addProjectContent, addProjectCreatorTab, addProjectCreatorInput}
@@ -182,10 +189,13 @@ const sidebarHandler = (() => {
   }
 
   function slideSidebarContainer(sidebarContainer) {
+    document.querySelector(".panel-container").style.transition = ".2s";
     if (sidebarContainer.classList.contains("slideable")) {
       sidebarContainer.classList.remove("slideable");
+      document.querySelector(".panel-container").style.marginLeft = "clamp(150px, 20vw, 300px)";
     } else if (!sidebarContainer.classList.contains("slideable")) {
       sidebarContainer.classList.add("slideable");
+      document.querySelector(".panel-container").style.marginLeft = "0";
     }
   }
 
@@ -205,7 +215,6 @@ const sidebarHandler = (() => {
   function listenProjectsContainers(projectContainerCustom) {
     if (projectContainerCustom) {
       projectContainerCustom.addEventListener("click", () => {
-        console.log("clicking");
         const p = projectContainerCustom.querySelector("p");
         sidebar.changeSidebarContainerState(p.textContent, projectContainerCustom.getAttribute("data-project-id"));
       })
@@ -219,20 +228,24 @@ const sidebarHandler = (() => {
   }
 
   function listenProjectCreatorContainer() {
-    let firstClick = true;
     projectCreatorContainer.addEventListener("click", () => {
-      console.log(projectCreatorContainer.querySelector(".project-input-container"));
-      if (projectCreatorContainer.querySelector(".project-input-container") === null) {
+      if (!projectCreatorContainer.classList.contains("inputting")) {
         project.addProjectCreatorInput();
-        setTimeout(() => firstClick = false, 200);
       }
     })
+  }
+
+  // Makes the project creator tab go back to default state whenever the user
+  // clicks on something else than the container itself during the
+  // input state
+  function listenWindow() {
+    const classesToCheck = ["panel-container", "sidebar-container", "header-container", "projects-tab"];
 
     window.addEventListener("click", e => {
-      if (!firstClick && !e.target.classList.contains("project-input-container")) {
-        console.log("doing");
-        console.log(e.target.classList);
-        project.addProjectCreatorTab();
+      if (projectCreatorContainer.classList.contains("inputting")) {
+        if (!e.target.classList.contains("inputting") && !e.target.classList.contains("project-input-container") && e.target.classList.length !== 0) {
+            project.addProjectCreatorTab();
+        }
       }
     })
   }
@@ -244,6 +257,8 @@ const sidebarHandler = (() => {
       const projectId = Object.keys(projectTodoListObj).length;
       todoLogicModule.objects.addProjectTodoList(projectId);
       project.addProjectContent(projectName, projectId+1);
+      project.addProjectCreatorTab();
+      console.log("adding");
     })
   }
 
@@ -256,7 +271,8 @@ const sidebarHandler = (() => {
   }
 
   return {listenInboxTab, listenProjectsTabEvent, listenProjectsContainers,
-     listenProjectCreatorContainer, slideSidebarContainer, listenAddProjectCreatorBtn};
+     listenProjectCreatorContainer, slideSidebarContainer, listenAddProjectCreatorBtn,
+      listenWindow};
 })();
 
 export default sidebar;

@@ -301,3 +301,4 @@ const formPanelLogic = (() => {
 })()
 
 export default formPanel;
+export const addAnimation = formPanel.addAnimation;
