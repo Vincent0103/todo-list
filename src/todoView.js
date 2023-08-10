@@ -84,7 +84,9 @@ const panel = (() => {
       title.textContent = currentTodoObj.title;
 
       const dueDate = document.createElement("p");
-      dueDate.textContent = todoLogic.convertDate(currentTodoObj.dueDate);
+      dueDate.innerHTML = `<span>to: </span>${todoLogic.convertDate(currentTodoObj.dueDate)}`;
+      dueDate.classList.add("todo-due-date");
+
       todoContainer.append(checkMarkContainer, title, dueDate);
       todoContainer.innerHTML += MenuDown;
 
@@ -139,67 +141,20 @@ const panel = (() => {
     }
 
     function addTodoTemplateContent() {
+
       let currentTodoObj = todoLogic.objects.addTodoObj(
-        "Master Plan of Achievements: Today's Tasks",
+        "click me!",
         "Stay organized and on top of your tasks with this comprehensive to-do list. Whether you're tackling work assignments.",
-        "2023-09-24T12:17",
-        "orange");
-
-      todoLogic.objects.addProjectTodoList(0, currentTodoObj);
-
-      currentTodoObj = todoLogic.objects.addTodoObj(
-        "TaskTrek: Navigating Your Day's Endeavors",
-        "Effortlessly manage tasks, boost productivity, and achieve more with TaskTrek.",
         "2028-11-23T18:21",
-        "blue");
-
-      todoLogic.objects.addProjectTodoList(0, currentTodoObj);
-
-      currentTodoObj = todoLogic.objects.addTodoObj(
-        "Spectrum Serenade: Echoes of Imagination",
-        "Embark on a vivid journey through diverse realms of creativity in Spectrum Serenade.",
-        "2043-07-25T03:43",
         "red");
 
       todoLogic.objects.addProjectTodoList(0, currentTodoObj);
 
       currentTodoObj = todoLogic.objects.addTodoObj(
-        "Productive Pursuits: Today's To-Do List",
+        "Welcome to todowht",
         "",
-        "",
+        "2023-09-24T12:17",
         "blue");
-
-      todoLogic.objects.addProjectTodoList(0, currentTodoObj);
-
-      currentTodoObj = todoLogic.objects.addTodoObj(
-        "Efficiency Unleashed: Tasks to Tackle",
-        "",
-        "2023-09-25T03:43",
-        "orange");
-
-      todoLogic.objects.addProjectTodoList(2, currentTodoObj);
-
-      currentTodoObj = todoLogic.objects.addTodoObj(
-        "Daily Achievements: Your Action Plan",
-        "Embark on a journey of productivity as you tackle a variety of tasks that span from errands to creative projects.",
-        "2043-07-25T03:43",
-        "gray");
-
-      todoLogic.objects.addProjectTodoList(2, currentTodoObj);
-
-      currentTodoObj = todoLogic.objects.addTodoObj(
-        "Mission Control: Prioritized Tasks Ahead",
-        "Dive into a whirlwind of activities that range from mundane chores to exciting endeavors.",
-        "2043-07-25T03:43",
-        "gray");
-
-      todoLogic.objects.addProjectTodoList(1, currentTodoObj);
-
-      currentTodoObj = todoLogic.objects.addTodoObj(
-        "Conquer the Day: Tasks at Your Fingertips",
-        "Discover the art of balance as you navigate between work, relaxation, and self-care.",
-        "",
-        "red");
 
       todoLogic.objects.addProjectTodoList(0, currentTodoObj);
 

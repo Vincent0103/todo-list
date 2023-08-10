@@ -207,6 +207,14 @@ body {
   background-color: rgb(217, 217, 217);
 }
 
+.todo-container > .todo-due-date {
+  font-size: .8rem;
+}
+
+.todo-container > .todo-due-date > span {
+  color: grey;
+}
+
 .todo-container > svg {
   height: 25px;
   width: 25px;
