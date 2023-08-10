@@ -1,6 +1,7 @@
 import header from "./header";
 import sidebar from "./sidebar";
 import addTodoView from "./todoView";
+import storeTodoObjs from "./storageHandler";
 
 const addPage = (() => {
   let sidebarPanelContainer;
@@ -8,6 +9,7 @@ const addPage = (() => {
     const htmlContainer = document.querySelector("#content");
     sidebarPanelContainer = document.createElement("div");
     sidebarPanelContainer.classList.add("sidebar-panel-container");
+    storeTodoObjs();
 
     const headerContainer = header.addContent();
     const sidebarContainer = sidebar.addContent();
@@ -15,6 +17,7 @@ const addPage = (() => {
     header.listenMenuSvg(headerContainer, sidebarContainer);
     htmlContainer.append(headerContainer, sidebarPanelContainer);
     sidebarPanelContainer.append(sidebarContainer, panelContainer);
+
   }
 
   function getSidebarPanelContainer() {

@@ -2,10 +2,6 @@ import MenuDown from "./assets/menu-down.svg";
 import PlusIcon from "./assets/plus-circle-outline.svg";
 import formPanel from "./formView";
 
-window.addEventListener("DOMContentLoaded", () => {
-  panel.todo.addTodoTemplateContent();
-})
-
 const panel = (() => {
   let currentProjectId;
   let idIncrementor;
@@ -49,6 +45,7 @@ const panel = (() => {
 
       if (typeof inboxProjectTodos === "object") {
         inboxProjectTodos.forEach(todo => {
+          console.log("doing");
           addTodoContainer(todo);
         })
       }
@@ -109,7 +106,6 @@ const panel = (() => {
 
     function removeTodoContainer(todoContainer) {
       const todoObjId = todoContainer.getAttribute("data-id");
-      console.log(todoObjId);
       todoLogic.objects.removeTodoObj(todoObjId, currentProjectId);
       handleTodoContainerRemoveAnimation();
 
@@ -140,26 +136,6 @@ const panel = (() => {
       return todoFormBtnContainer;
     }
 
-    function addTodoTemplateContent() {
-
-      let currentTodoObj = todoLogic.objects.addTodoObj(
-        "click me!",
-        "Stay organized and on top of your tasks with this comprehensive to-do list. Whether you're tackling work assignments.",
-        "2028-11-23T18:21",
-        "red");
-
-      todoLogic.objects.addProjectTodoList(0, currentTodoObj);
-
-      currentTodoObj = todoLogic.objects.addTodoObj(
-        "Welcome to todowht",
-        "",
-        "2023-09-24T12:17",
-        "blue");
-
-      todoLogic.objects.addProjectTodoList(0, currentTodoObj);
-
-    }
-
     function getPanelContainer() {
       return panelContainer;
     }
@@ -185,7 +161,7 @@ const panel = (() => {
       }
     }
 
-    return {addTodoContent, addTodoTemplateContent, removeTodoContainer, addTodoContainer, containsDesc, handleExpandableClass};
+    return {addTodoContent, removeTodoContainer, addTodoContainer, containsDesc, handleExpandableClass};
   })()
 
   return {addContent, getIdIncrementor, getCurrentProjectId, todo};
@@ -261,7 +237,6 @@ const todoLogic = (() => {
     }
 
     function removeTodoObj(todoObjId, projectId) {
-      console.log("removing " + todoObjId);
       getProjectsTodoListObj()[projectId].splice(todoObjId, 1);
     }
 
@@ -316,7 +291,6 @@ const todoLogic = (() => {
 
       // makes it so the todoDesc content doesn't overflow in a manner of dynamicity
       function changeGridTemplateRowHeight() {
-        console.log("doing");
         hasExecutedOnce = true;
         if (descHeight <= 116) {
           todoContainer.style.gridTemplateRows = `auto ${descHeight + 20}px`;

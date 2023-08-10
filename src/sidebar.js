@@ -1,10 +1,11 @@
 import InboxIcon from "./assets/inbox.svg";
 import MenuDown from "./assets/menu-down.svg";
 import AddProjectIcon from "./assets/plus-box-multiple-outline.svg"
-import todoPanel from "./todoView";
+import todoPanel, { getCurrentProjectId } from "./todoView";
 import { todoLogicModule } from "./todoView";
 import addPage from "./pageload";
 import { addAnimation } from "./formView";
+import storeTodoObjs from "./storageHandler";
 
 let sidebarContainer;
 let menuSvg;
@@ -137,7 +138,6 @@ const project = (() => {
     if (typeof projectCreatorContainer !== "undefined") {
       projectCreatorContainer.innerHTML = "";
       projectCreatorContainer.classList.remove("inputting");
-      console.log(projectCreatorContainer.classList);
     } else {
       projectCreatorContainer = document.createElement("div");
       projectCreatorContainer.classList.add("project-creator-container");
@@ -258,7 +258,6 @@ const sidebarHandler = (() => {
       todoLogicModule.objects.addProjectTodoList(projectId);
       project.addProjectContent(projectName, projectId+1);
       project.addProjectCreatorTab();
-      console.log("adding");
     })
   }
 

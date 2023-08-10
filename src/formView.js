@@ -3,6 +3,7 @@ import CheckIcon from "./assets/check-bold.svg";
 import { addTodoContainer } from "./todoView";
 import { getCurrentProjectId } from "./todoView";
 import { todoLogicModule } from "./todoView";
+import storeTodoObjs from "./storageHandler";
 
 const formPanel = (() => {
   let darkenBodyDiv;
@@ -271,15 +272,16 @@ const formPanelLogic = (() => {
         let areValidInputs = checkFormValidity(inputContainers);
 
         if (areValidInputs) {
+          const currentProjectId = getCurrentProjectId();
           const title = inputContainers[0].value;
           const date = inputContainers[1].value;
           const desc = inputContainers[2].value;
           const priorityColor = priorityInput.getAttribute("value");
           const formTodoObj = todoLogicModule.objects.addTodoObj(title, desc, date, priorityColor);
-          todoLogicModule.objects.addProjectTodoList(getCurrentProjectId(), formTodoObj);
-          console.log(todoLogicModule.objects.getProjectsTodoListObj());
-          console.log(getCurrentProjectId());
+          todoLogicModule.objects.addProjectTodoList(currentProjectId, formTodoObj);
           addTodoContainer(formTodoObj);
+          console.log(formTodoObj);
+          storeTodoObjs("form", currentProjectId, formTodoObj);
           formPanel.addSuccessMessage(panelFormContainer);
           hasClicked = true;
         }
