@@ -281,9 +281,9 @@ const formPanelLogic = (() => {
           console.log(getCurrentProjectId());
           addTodoContainer(formTodoObj);
           formPanel.addSuccessMessage(panelFormContainer);
+          hasClicked = true;
         }
 
-        hasClicked = true;
       }
     });
 
