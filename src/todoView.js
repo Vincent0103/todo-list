@@ -107,6 +107,7 @@ const panel = (() => {
 
     function removeTodoContainer(todoContainer) {
       const todoObjId = todoContainer.getAttribute("data-id");
+      console.log(todoObjId);
       todoLogic.objects.removeTodoObj(todoObjId, currentProjectId);
       handleTodoContainerRemoveAnimation();
 
@@ -163,40 +164,45 @@ const panel = (() => {
       todoLogic.objects.addProjectTodoList(0, currentTodoObj);
 
       currentTodoObj = todoLogic.objects.addTodoObj(
-        "Spectrum Serenade: Echoes of Imagination",
-        "Embark on a vivid journey through diverse realms of creativity in Spectrum Serenade.",
-        "2043-07-25T03:43",
-        "red");
-
-      todoLogic.objects.addProjectTodoList(1, currentTodoObj);
-
-      currentTodoObj = todoLogic.objects.addTodoObj(
-        "Whispering Shadows: Secrets Unveiled",
-        "");
-
-      todoLogic.objects.addProjectTodoList(1, currentTodoObj);
-
-      currentTodoObj = todoLogic.objects.addTodoObj(
-        "Spectrum Serenade: Echoes of Imagination",
-        "Embark on a vivid journey through diverse realms of creativity in Spectrum Serenade.",
-        "2043-07-25T03:43",
-        "red");
-
-      todoLogic.objects.addProjectTodoList(2, currentTodoObj);
-
-      currentTodoObj = todoLogic.objects.addTodoObj(
-        "TaskTrek: Navigating Your Day's Endeavors",
-        "Effortlessly manage tasks, boost productivity, and achieve more with TaskTrek.",
-        "2028-11-23T18:21",
+        "Productive Pursuits: Today's To-Do List",
+        "",
+        "",
         "blue");
 
+      todoLogic.objects.addProjectTodoList(0, currentTodoObj);
+
+      currentTodoObj = todoLogic.objects.addTodoObj(
+        "Efficiency Unleashed: Tasks to Tackle",
+        "",
+        "2023-09-25T03:43",
+        "orange");
+
       todoLogic.objects.addProjectTodoList(2, currentTodoObj);
 
       currentTodoObj = todoLogic.objects.addTodoObj(
-        "Whispering Shadows: Secrets Unveiled",
-        "");
+        "Daily Achievements: Your Action Plan",
+        "Embark on a journey of productivity as you tackle a variety of tasks that span from errands to creative projects.",
+        "2043-07-25T03:43",
+        "gray");
+
+      todoLogic.objects.addProjectTodoList(2, currentTodoObj);
+
+      currentTodoObj = todoLogic.objects.addTodoObj(
+        "Mission Control: Prioritized Tasks Ahead",
+        "Dive into a whirlwind of activities that range from mundane chores to exciting endeavors.",
+        "2043-07-25T03:43",
+        "gray");
+
+      todoLogic.objects.addProjectTodoList(1, currentTodoObj);
+
+      currentTodoObj = todoLogic.objects.addTodoObj(
+        "Conquer the Day: Tasks at Your Fingertips",
+        "Discover the art of balance as you navigate between work, relaxation, and self-care.",
+        "",
+        "red");
 
       todoLogic.objects.addProjectTodoList(0, currentTodoObj);
+
     }
 
     function getPanelContainer() {
@@ -271,8 +277,12 @@ const todoLogic = (() => {
 
     function addProjectTodoList(projectId, todoObj) {
       projectId = String(projectId);
-      if (!(projectId in projectsTodoListObj)) {
-        projectsTodoListObj[projectId] = [todoObj];
+      if (!(projectId in projectsTodoListObj) && !todoObj) {
+        projectsTodoListObj[projectId] = [];
+
+      } else if (!(projectId in projectsTodoListObj) && todoObj) {
+          projectsTodoListObj[projectId] = [todoObj];
+
       } else {
         projectsTodoListObj[projectId].push(todoObj);
       }
@@ -296,6 +306,7 @@ const todoLogic = (() => {
     }
 
     function removeTodoObj(todoObjId, projectId) {
+      console.log("removing " + todoObjId);
       getProjectsTodoListObj()[projectId].splice(todoObjId, 1);
     }
 
