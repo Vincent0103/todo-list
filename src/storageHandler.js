@@ -36,7 +36,10 @@ function storeTodoObjs(type, projectId, todoObj) {
 
     if (localStorage.getItem("projectsTodoListObj") && type === "form") {
       populateStorage(type, projectId, todoObj);
-    } else {
+    } else if (localStorage.getItem("projectsTodoListObj") && type === "remove") {
+      populateStorage(type, projectId, todoObj);
+    }
+    else {
       populateStorage();
     }
 
@@ -46,7 +49,7 @@ function storeTodoObjs(type, projectId, todoObj) {
 
 }
 
-function addProjectTodoList(projectsTodoListObj, projectId, todoObj) {
+function addProjectStorageTodoList(projectsTodoListObj, projectId, todoObj) {
   projectId = String(projectId);
   if (!(projectId in projectsTodoListObj) && !todoObj) {
     projectsTodoListObj[projectId] = [];
@@ -63,14 +66,7 @@ function populateStorage(type, projectId, todoObj) {
   if (isDOMloading) {
     if (localStorage.getItem("projectsTodoListObj")) {
       const projectsTodoListObj = JSON.parse(localStorage.getItem("projectsTodoListObj"));
-
-      for (const projectId of Object.keys(projectsTodoListObj)) {
-        const projectObj = projectsTodoListObj[projectId];
-        for (const todoObj in projectObj) {
-          todoLogicModule.objects.addProjectTodoList(Number.parseInt(projectId), projectObj[todoObj]);
-        }
-      }
-      console.log(todoLogicModule.objects.getProjectsTodoListObj());
+      iterateOverStorageObjItem(projectsTodoListObj);
     }
 
     isDOMloading = false;
@@ -83,11 +79,31 @@ function populateStorage(type, projectId, todoObj) {
   } else if (type === "form") {
     const projectsTodoListObj = JSON.parse(localStorage.getItem("projectsTodoListObj"));
 
-    addProjectTodoList(projectsTodoListObj, projectId, todoObj);
+    addProjectStorageTodoList(projectsTodoListObj, projectId, todoObj);
 
     localStorage.setItem("projectsTodoListObj", JSON.stringify(projectsTodoListObj));
   }
+}
 
+function addToStorageObjItem(projectObj, projectId, todoObj) {
+  todoLogicModule.objects.addProjectTodoList(Number.parseInt(projectId), projectObj[todoObj]);
+}
+
+function removeToStorageObjItem(todoObjId, projectId) {
+  if (storageAvailable("localStorage")) {
+    let projectsTodoListObj = JSON.parse(localStorage.getItem("projectsTodoListObj"));
+    projectsTodoListObj[projectId].splice(todoObjId, 1);
+    localStorage.setItem("projectsTodoListObj", JSON.stringify(projectsTodoListObj));
+  }
+}
+
+function iterateOverStorageObjItem(storageItem) {
+  for (const projectId of Object.keys(storageItem)) {
+    const projectObj = storageItem[projectId];
+    for (const todoObj in projectObj) {
+      addToStorageObjItem(projectObj, projectId, todoObj);
+    }
+  }
 }
 
 
@@ -112,3 +128,4 @@ function addTodoTemplateContent() {
 }
 
 export default storeTodoObjs;
+export const removeToStorageFunc = removeToStorageObjItem;

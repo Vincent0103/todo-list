@@ -1,6 +1,8 @@
 import MenuDown from "./assets/menu-down.svg";
 import PlusIcon from "./assets/plus-circle-outline.svg";
 import formPanel from "./formView";
+import storeTodoObjs from "./storageHandler";
+import { removeToStorageFunc } from "./storageHandler";
 
 const panel = (() => {
   let currentProjectId;
@@ -105,7 +107,9 @@ const panel = (() => {
     }
 
     function removeTodoContainer(todoContainer) {
+      console.log(todoLogicModule.objects.getProjectsTodoListObj());
       const todoObjId = todoContainer.getAttribute("data-id");
+      removeToStorageFunc(todoObjId, currentProjectId);
       todoLogic.objects.removeTodoObj(todoObjId, currentProjectId);
       handleTodoContainerRemoveAnimation();
 
