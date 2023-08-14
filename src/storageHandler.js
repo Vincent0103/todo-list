@@ -153,7 +153,7 @@ const storeProjectNames = (() => {
     if (typeof projectNames === "undefined") {
       projectNames = {[projectId]: projectName};
     } else {
-      if (!projectId in projectNames) {
+      if (!(projectId in projectNames)) {
         projectNames[projectId] = projectName;
       }
     }
