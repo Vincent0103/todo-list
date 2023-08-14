@@ -1,7 +1,7 @@
 import MenuDown from "./assets/menu-down.svg";
 import PlusIcon from "./assets/plus-circle-outline.svg";
 import formPanel from "./formView";
-import { removeToStorageFunc } from "./storageHandler";
+import { removeToStorageFunc, removeProjectObjFromStorageFunc } from "./storageHandler";
 
 const panel = (() => {
   let currentProjectId;
@@ -235,6 +235,11 @@ const todoLogic = (() => {
       }
     }
 
+    function removeProjectTodoList(projectId) {
+      delete projectsTodoListObj[projectId];
+      console.log(removeProjectObjFromStorageFunc(projectId));
+    }
+
     function addTodoObj(title, desc="", dueDate="", priority="gray", isDone=false) {
       if (desc.length >= 160) {
         throw new Error(`Description is longer than 160 characters! \n${desc}`);
@@ -257,7 +262,7 @@ const todoLogic = (() => {
     }
 
     return {getProjectsTodoListObj, getPriorityStyling, addProjectTodoList,
-      addTodoObj, removeTodoObj};
+      addTodoObj, removeTodoObj, removeProjectTodoList};
   })();
 
   const listeners = (() => {

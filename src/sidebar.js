@@ -1,6 +1,7 @@
 import InboxIcon from "./assets/inbox.svg";
 import MenuDown from "./assets/menu-down.svg";
-import AddProjectIcon from "./assets/plus-box-multiple-outline.svg"
+import AddProjectIcon from "./assets/plus-box-multiple-outline.svg";
+import removeProjectIcon from "./assets/close-thick.svg";
 import todoPanel, { getCurrentProjectId } from "./todoView";
 import { todoLogicModule } from "./todoView";
 import addPage from "./pageload";
@@ -103,6 +104,8 @@ const project = (() => {
       pCustom.textContent = projectName;
       projectContainerCustom.appendChild(pCustom);
       projectContainerCustom.setAttribute("data-project-id", projectId);
+      projectContainerCustom.innerHTML += removeProjectIcon;
+
       storeProjectNamesFunc.addProjectName(projectId, projectName);
 
 
@@ -128,7 +131,6 @@ const project = (() => {
 
       projectContainer2.appendChild(p2);
       projectContainer2.setAttribute("data-project-id", 2);
-
 
       projectsContainer.splice(0, 0, projectContainer1, projectContainer2);
       sidebarHandler.listenProjectsContainers();
@@ -181,7 +183,16 @@ const project = (() => {
     sidebarHandler.listenWindow();
   }
 
-  return {addProjectsTab, addProjects, addProjectContent, addProjectCreatorTab, addProjectCreatorInput}
+  function removeProjectContainer(projectContainer, projectId) {
+    addAnimation(projectContainer, "slideProjectUp", .2);
+    setTimeout(() => projectContainer.remove(), 190);
+    addProjectContent();
+    todoLogicModule.objects.removeProjectTodoList(projectId);
+    sidebar.changeSidebarContainerState("Inbox", 0);
+  }
+
+  return {addProjectsTab, addProjects, addProjectContent, addProjectCreatorTab,
+     addProjectCreatorInput, removeProjectContainer}
 })();
 
 const sidebarHandler = (() => {
@@ -218,17 +229,25 @@ const sidebarHandler = (() => {
 
   function listenProjectsContainers(projectContainerCustom) {
     if (projectContainerCustom) {
-      projectContainerCustom.addEventListener("click", () => {
-        const p = projectContainerCustom.querySelector("p");
-        sidebar.changeSidebarContainerState(p.textContent, projectContainerCustom.getAttribute("data-project-id"));
-      })
+      projectContainerCustom.addEventListener("click", e => {
+        addFuncOnSvg(projectContainerCustom, e);
+      });
     }
     projectsContainer.forEach(projectContainer => {
-      projectContainer.addEventListener("click", () => {
-        const p = projectContainer.querySelector("p");
-        sidebar.changeSidebarContainerState(p.textContent, projectContainer.getAttribute("data-project-id"));
-      })
-    })
+      projectContainer.addEventListener("click", e => {
+        addFuncOnSvg(projectContainer, e);
+      });
+    });
+
+    const addFuncOnSvg = (projectContainer, e) => {
+      const p = projectContainer.querySelector("p");
+      const projectId = projectContainer.getAttribute("data-project-id")
+      if (e.target.tagName !== "svg" && e.target.tagName !== "path") {
+        sidebar.changeSidebarContainerState(p.textContent, projectId);
+      } else {
+        project.removeProjectContainer(projectContainer, projectId);
+      }
+    }
   }
 
   function listenProjectCreatorContainer() {

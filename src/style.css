@@ -90,24 +90,25 @@ body {
 }
 
 .project-container {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   overflow: hidden;
   height: 0;
-  transition: .3s ease-in-out;
-  transition-property: height, padding;
+  transition:  all .2s ease-in-out;
 }
 
 .project-container:not(.project-container:last-child) {
   border-bottom: 1px solid #d7dcde;
   margin-top: -2px;
-  transition: all .3s;
+  transition: all .2s;
 }
 
 .project-container:not(.project-container:first-child) {
   border-top: 1px solid #d7dcde;
   margin-top: -2px;
-  transition: all .3s;
+  transition: all .2s;
 }
 
 .project-container.expandable:not(.project-container:last-child),
@@ -121,6 +122,20 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.project-container > svg {
+  position: absolute;
+  right: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: 2px solid rgba(0, 0, 0, 0);
+  transition: border-color .1s, background-color .1s;
+}
+
+.project-container > svg:hover {
+  border-color: #d7dcde;
+  background-color: #fafafa;
 }
 
 .project-container:hover {
@@ -349,6 +364,19 @@ body {
     transform: scale(.8);
     margin-top: -76px;
     opacity: 0;
+  }
+}
+
+@keyframes slideProjectUp {
+  from {
+    margin-top: 0;
+    opacity: 1;
+    z-index: -1;
+  }
+  to {
+    margin-top: -41px;
+    opacity: 0;
+    z-index: -1;
   }
 }
 

@@ -134,6 +134,18 @@ function addTodoTemplateContent() {
   todoLogicModule.objects.addProjectTodoList(0, currentTodoObj);
 }
 
+function removeProjectObjFromStorage(projectId) {
+  const projectsTodoListObj = JSON.parse(localStorage.getItem("projectsTodoListObj"));
+  delete projectsTodoListObj[projectId];
+  localStorage.setItem("projectsTodoListObj", JSON.stringify(projectsTodoListObj));
+
+  const projectNames = storeProjectNames.getProjectNames();
+  delete projectNames[projectId];
+  localStorage.setItem("projectNames", JSON.stringify(projectNames));
+
+  console.log(projectNames);
+}
+
 const storeProjectNames = (() => {
   function getProjectNames() {
     return JSON.parse(localStorage.getItem("projectNames"));
@@ -166,4 +178,5 @@ const storeProjectNames = (() => {
 
 export default storeTodoObjs;
 export const removeToStorageFunc = removeToStorageObjItem;
+export const removeProjectObjFromStorageFunc = removeProjectObjFromStorage;
 export const storeProjectNamesFunc = storeProjectNames;
