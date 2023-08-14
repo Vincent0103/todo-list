@@ -7,6 +7,8 @@ import { todoLogicModule } from "./todoView";
 import addPage from "./pageload";
 import { addAnimation } from "./formView";
 import { storeProjectNamesFunc } from "./storageHandler";
+import projectDeleteAd from "./projectDeleteAd";
+import { once } from "lodash";
 
 let sidebarContainer;
 let menuSvg;
@@ -184,11 +186,7 @@ const project = (() => {
   }
 
   function removeProjectContainer(projectContainer, projectId) {
-    addAnimation(projectContainer, "slideProjectUp", .2);
-    setTimeout(() => projectContainer.remove(), 190);
-    addProjectContent();
-    todoLogicModule.objects.removeProjectTodoList(projectId);
-    sidebar.changeSidebarContainerState("Inbox", 0);
+    projectDeleteAd.displayAd(projectContainer, projectId);
   }
 
   return {addProjectsTab, addProjects, addProjectContent, addProjectCreatorTab,
