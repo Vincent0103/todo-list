@@ -5,7 +5,7 @@ import todoPanel, { getCurrentProjectId } from "./todoView";
 import { todoLogicModule } from "./todoView";
 import addPage from "./pageload";
 import { addAnimation } from "./formView";
-import storeTodoObjs from "./storageHandler";
+import { storeProjectNamesFunc } from "./storageHandler";
 
 let sidebarContainer;
 let menuSvg;
@@ -18,7 +18,14 @@ const sidebar = (() => {
     sidebarContainer = document.createElement("div");
     sidebarContainer.classList.add("sidebar-container");
 
-    sidebarContainer.append(addInboxTab(), project.addProjectsTab(), project.addProjects(), project.addProjectCreatorTab());
+    sidebarContainer.append(addInboxTab(), project.addProjectsTab(), project.addProjects());
+
+    const storedProjects = storeProjectNamesFunc.getProjectNames();
+    for (const projectId in storedProjects) {
+      project.addProjectContent(projectId, storedProjects[projectId]);
+    }
+
+    sidebarContainer.appendChild(project.addProjectCreatorTab());
 
     return sidebarContainer;
   }
@@ -79,7 +86,7 @@ const project = (() => {
     return allProjectsContainer;
   }
 
-  function addProjectContent(projectName, projectId) {
+  function addProjectContent(projectId, projectName) {
     if (projectName && projectId) {
       const projectContainerCustom = document.createElement("div");
 
@@ -96,17 +103,21 @@ const project = (() => {
       pCustom.textContent = projectName;
       projectContainerCustom.appendChild(pCustom);
       projectContainerCustom.setAttribute("data-project-id", projectId);
+      storeProjectNamesFunc.addProjectName(projectId, projectName);
+      console.log(storeProjectNamesFunc.getProjectNames());
 
 
       projectsContainer.push(projectContainerCustom);
       sidebarHandler.listenProjectsContainers(projectContainerCustom);
       allProjectsContainer.appendChild(projectContainerCustom);
     } else {
+
       const projectContainer1 = document.createElement("div");
       projectContainer1.classList.add("project-container");
 
       const p1 = document.createElement("p");
       p1.textContent = "Work";
+
       projectContainer1.appendChild(p1);
       projectContainer1.setAttribute("data-project-id", 1);
 
@@ -115,21 +126,16 @@ const project = (() => {
 
       const p2 = document.createElement("p");
       p2.textContent = "Self";
+
       projectContainer2.appendChild(p2);
       projectContainer2.setAttribute("data-project-id", 2);
 
-      const projectContainer3 = document.createElement("div");
-      projectContainer3.classList.add("project-container");
+      console.log(todoLogicModule.objects.getProjectsTodoListObj());
 
-      const p3 = document.createElement("p");
-      p3.textContent = "smh";
-      projectContainer3.appendChild(p3);
-      projectContainer3.setAttribute("data-project-id", 3);
-
-      projectsContainer.splice(0, 0, projectContainer1, projectContainer2, projectContainer3);
+      projectsContainer.splice(0, 0, projectContainer1, projectContainer2);
       sidebarHandler.listenProjectsContainers();
 
-      return [projectContainer1, projectContainer2, projectContainer3];
+      return [projectContainer1, projectContainer2];
 
     }
   }
@@ -173,7 +179,7 @@ const project = (() => {
     addAnimation(div, "fadeIn", .1);
 
     projectCreatorContainer.append(input, div);
-    sidebarHandler.listenAddProjectCreatorBtn(div, input);
+    sidebarHandler.listenAddProjectCreatorBtn(allProjectsContainer, div, input);
     sidebarHandler.listenWindow();
   }
 
@@ -250,13 +256,14 @@ const sidebarHandler = (() => {
     })
   }
 
-  function listenAddProjectCreatorBtn(addProjectBtn, inputContainer) {
+  function listenAddProjectCreatorBtn(allProjectContainers, addProjectBtn, inputContainer) {
     addProjectBtn.addEventListener("click", () => {
       const projectName = inputContainer.value;
-      const projectTodoListObj = todoLogicModule.objects.getProjectsTodoListObj();
-      const projectId = Object.keys(projectTodoListObj).length;
-      todoLogicModule.objects.addProjectTodoList(projectId);
-      project.addProjectContent(projectName, projectId+1);
+      const lastProjectContainer = allProjectContainers.querySelector(".project-container:last-child");
+      const projectId = Number.parseInt(lastProjectContainer.getAttribute("data-project-id"));
+
+      todoLogicModule.objects.addProjectTodoList(projectId+1);
+      project.addProjectContent(projectId+1, projectName);
       project.addProjectCreatorTab();
     })
   }

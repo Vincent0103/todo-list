@@ -1,7 +1,6 @@
 import MenuDown from "./assets/menu-down.svg";
 import PlusIcon from "./assets/plus-circle-outline.svg";
 import formPanel from "./formView";
-import storeTodoObjs from "./storageHandler";
 import { removeToStorageFunc } from "./storageHandler";
 
 const panel = (() => {
@@ -244,7 +243,8 @@ const todoLogic = (() => {
       getProjectsTodoListObj()[projectId].splice(todoObjId, 1);
     }
 
-    return {getProjectsTodoListObj, getPriorityStyling, addProjectTodoList, addTodoObj, removeTodoObj};
+    return {getProjectsTodoListObj, getPriorityStyling, addProjectTodoList,
+      addTodoObj, removeTodoObj};
   })();
 
   const listeners = (() => {

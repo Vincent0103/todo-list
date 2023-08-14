@@ -280,7 +280,6 @@ const formPanelLogic = (() => {
           const formTodoObj = todoLogicModule.objects.addTodoObj(title, desc, date, priorityColor);
           todoLogicModule.objects.addProjectTodoList(currentProjectId, formTodoObj);
           addTodoContainer(formTodoObj);
-          console.log(formTodoObj);
           storeTodoObjs("form", currentProjectId, formTodoObj);
           formPanel.addSuccessMessage(panelFormContainer);
           hasClicked = true;

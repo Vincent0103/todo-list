@@ -106,9 +106,6 @@ function iterateOverStorageObjItem(storageItem) {
   }
 }
 
-
-
-
 function addTodoTemplateContent() {
   let currentTodoObj = todoLogicModule.objects.addTodoObj(
     "click me!",
@@ -127,5 +124,36 @@ function addTodoTemplateContent() {
   todoLogicModule.objects.addProjectTodoList(0, currentTodoObj);
 }
 
+const storeProjectNames = (() => {
+  function getProjectNames() {
+    return JSON.parse(localStorage.getItem("projectNames"));
+  }
+
+  function addProjectName(projectId, projectName) {
+    let projectNames;
+
+    if (!localStorage.getItem("projectNames")) {
+      projectNames = localStorage.setItem("projectNames", JSON.stringify({}));
+    } else {
+      projectNames = JSON.parse(localStorage.getItem("projectNames"));
+    }
+
+    // no one line if statements because if projectNames is undefined,
+    // throws errors when looping through keys in undefined
+    if (typeof projectNames === "undefined") {
+      projectNames = {[projectId]: projectName};
+    } else {
+      if (!projectId in projectNames) {
+        projectNames[projectId] = projectName;
+      }
+    }
+
+    localStorage.setItem("projectNames", JSON.stringify(projectNames));
+  }
+
+  return {getProjectNames, addProjectName};
+})();
+
 export default storeTodoObjs;
 export const removeToStorageFunc = removeToStorageObjItem;
+export const storeProjectNamesFunc = storeProjectNames;
