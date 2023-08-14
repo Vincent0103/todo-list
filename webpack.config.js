@@ -1,7 +1,7 @@
 const path = require("path");
 
 module.exports = {
-  mode: "development",
+  mode: "production",
   entry: {
     index: "./src/index.js",
     pageload: "./src/pageload.js",
@@ -10,10 +10,12 @@ module.exports = {
     todoView: "./src/todoView.js",
     formView: "./src/formView.js",
     storageHandler: "./src/storageHandler.js",
+    projectDeleteAd: "./src/projectDeleteAd.js",
   },
   output: {
     filename: "[name].bundle.js",
     path: path.resolve(__dirname, "dist"),
+    clean: true,
   },
   module: {
     rules: [

@@ -8,7 +8,6 @@ import addPage from "./pageload";
 import { addAnimation } from "./formView";
 import { storeProjectNamesFunc } from "./storageHandler";
 import projectDeleteAd from "./projectDeleteAd";
-import { once } from "lodash";
 
 let sidebarContainer;
 let menuSvg;

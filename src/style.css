@@ -133,6 +133,12 @@ body {
   transition: border-color .1s, background-color .1s;
 }
 
+@media (max-width: 1100px) {
+  .project-container > svg {
+    right: 0;
+  }
+}
+
 .project-container > svg:hover {
   border-color: #d7dcde;
   background-color: #fafafa;
