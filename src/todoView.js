@@ -46,7 +46,6 @@ const panel = (() => {
 
       if (typeof inboxProjectTodos === "object") {
         inboxProjectTodos.forEach(todo => {
-          console.log("doing");
           addTodoContainer(todo);
         })
       }
@@ -81,9 +80,7 @@ const panel = (() => {
       const title = document.createElement("p");
       title.textContent = currentTodoObj.title;
 
-      const dueDate = document.createElement("p");
-      dueDate.innerHTML = `<span>to: </span>${todoLogic.convertDate(currentTodoObj.dueDate)}`;
-      dueDate.classList.add("todo-due-date");
+      const dueDate = getDueDate(currentTodoObj.dueDate);
 
       todoContainer.append(checkMarkContainer, title, dueDate);
       todoContainer.innerHTML += MenuDown;
@@ -106,7 +103,6 @@ const panel = (() => {
     }
 
     function removeTodoContainer(todoContainer) {
-      console.log(todoLogicModule.objects.getProjectsTodoListObj());
       const todoObjId = todoContainer.getAttribute("data-id");
       removeToStorageFunc(todoObjId, currentProjectId);
       todoLogic.objects.removeTodoObj(todoObjId, currentProjectId);
@@ -150,6 +146,23 @@ const panel = (() => {
         return false;
       }
       return true;
+    }
+
+    function getDueDate(formDueDate) {
+      let dueDate = document.createElement("p");
+
+      const containsDueDate = element => {
+        element = (formDueDate)
+        ? element.innerHTML = `<span>to: </span>${todoLogic.convertDate(formDueDate)}`
+        : element.innerHTML = "";
+
+        return dueDate;
+      }
+      dueDate = containsDueDate(dueDate);
+
+      dueDate.classList.add("todo-due-date");
+
+      return dueDate;
     }
 
     function handleExpandableClass(todoContainer, todoDesc) {

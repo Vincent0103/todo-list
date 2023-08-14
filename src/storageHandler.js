@@ -92,7 +92,9 @@ function addToStorageObjItem(projectObj, projectId, todoObj) {
 function removeToStorageObjItem(todoObjId, projectId) {
   if (storageAvailable("localStorage")) {
     let projectsTodoListObj = JSON.parse(localStorage.getItem("projectsTodoListObj"));
-    projectsTodoListObj[projectId].splice(todoObjId, 1);
+    let todoObjIdIndex = Object.keys(projectsTodoListObj[projectId]).indexOf(todoObjId);
+
+    projectsTodoListObj[projectId].splice(todoObjIdIndex, 1);
     localStorage.setItem("projectsTodoListObj", JSON.stringify(projectsTodoListObj));
   }
 }
@@ -108,6 +110,14 @@ function iterateOverStorageObjItem(storageItem) {
 
 function addTodoTemplateContent() {
   let currentTodoObj = todoLogicModule.objects.addTodoObj(
+    "click the check button to remove todo list",
+    "",
+    "",
+    "blue");
+
+    todoLogicModule.objects.addProjectTodoList(0, currentTodoObj);
+
+  currentTodoObj = todoLogicModule.objects.addTodoObj(
     "click me!",
     "Stay organized and on top of your tasks with this comprehensive to-do list. Whether you're tackling work assignments.",
     "2028-11-23T18:21",
@@ -116,7 +126,7 @@ function addTodoTemplateContent() {
   todoLogicModule.objects.addProjectTodoList(0, currentTodoObj);
 
   currentTodoObj = todoLogicModule.objects.addTodoObj(
-    "Welcome to todowht",
+    "Welcome to TODOWHT!",
     "",
     "2023-09-24T12:17",
     "blue");

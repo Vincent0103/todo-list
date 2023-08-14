@@ -104,7 +104,6 @@ const project = (() => {
       projectContainerCustom.appendChild(pCustom);
       projectContainerCustom.setAttribute("data-project-id", projectId);
       storeProjectNamesFunc.addProjectName(projectId, projectName);
-      console.log(storeProjectNamesFunc.getProjectNames());
 
 
       projectsContainer.push(projectContainerCustom);
@@ -130,7 +129,6 @@ const project = (() => {
       projectContainer2.appendChild(p2);
       projectContainer2.setAttribute("data-project-id", 2);
 
-      console.log(todoLogicModule.objects.getProjectsTodoListObj());
 
       projectsContainer.splice(0, 0, projectContainer1, projectContainer2);
       sidebarHandler.listenProjectsContainers();
