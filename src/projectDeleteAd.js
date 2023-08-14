@@ -28,7 +28,7 @@ const projectDeleteAd = (() => {
       yesBtn.classList.add("ad-yes-btn");
 
       const noBtn = document.createElement("button");
-      noBtn.textContent = "NO";
+      noBtn.textContent = "no.";
       noBtn.classList.add("ad-no-btn");
 
       panelAdContainer.append(h2, yesBtn, noBtn);
